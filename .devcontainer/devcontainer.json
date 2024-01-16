@@ -1,0 +1,19 @@
+{
+  "name": "todo_front",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "nextjs",
+  "workspaceFolder": "/home/appuser/devcon",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "appuser",
+  "updateRemoteUserUID": true,
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "mhutchie.git-graph"
+      ]
+    }
+  }
+}
