@@ -1,5 +1,9 @@
-function Contact() {
-  return <h2>Contact</h2>;
+type ContactProps = {
+  message: string;
+};
+
+function Contact(props: ContactProps) {
+  return <h2>{props.message}</h2>;
 }
 
 export default Contact;
