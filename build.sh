@@ -17,6 +17,8 @@ else
   yarn add -D tailwindcss postcss autoprefixer
   npx tailwindcss init
   sed -i "s/content: \[\]/content: \[\".\/src\/\*\*\/\*.{js,jsx,ts,tsx}\"\]/" tailwind.config.js
+  cp ../index.css ./src/index.css
+  cp ../main.tsx ./src/main.tsx
 fi
 
 # cd ./react

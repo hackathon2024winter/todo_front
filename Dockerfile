@@ -1,10 +1,11 @@
 FROM ubuntu:20.04
 
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y --fix-missing curl tree sudo git
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
-RUN apt-get install -y nodejs
+RUN apt-get update && apt-get install -y --fix-missing nodejs
 RUN npm install -g yarn
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # コンテナ内に開放するポート。docker-compose.ymlと一致させる。
 ARG PORT_VITE
