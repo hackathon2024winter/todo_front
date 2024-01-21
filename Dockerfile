@@ -7,8 +7,8 @@ RUN npm install -g yarn
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # コンテナ内に開放するポート。docker-compose.ymlと一致させる。
-ARG PORT_NEXT
-EXPOSE $PORT_NEXT
+ARG PORT_VITE
+EXPOSE $PORT_VITE
 
 # localhostでid $whoamiを実行しuidとgidの数値を事前に確認し.envファイルに転機すること。
 # localhostのユーザーと同一のuid・gidのユーザーを作成。

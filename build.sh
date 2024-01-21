@@ -3,14 +3,31 @@ set -e
 
 export $(xargs < .env)
 
-cd ./nextjs
-# 最初にnextjsのプロジェクトをインストールする場合=serverフォルダが完全に空っぽ
-if [ -z "$(ls -A . )" ]; then
-  npx create-next-app@12.3.4 . --ts --yes
+DIR="react-app"
+
+if [ -d $DIR ]; then
+  cd ./react-app
+else
+  npm create vite@latest react-app -- --template react-swc-ts  
+  cd ./react-app
   # npmライブラリはここに追加して下さい。
-  yarn add react react-dom interactjs
+  yarn add react react-dom react-router-dom @dnd-kit/core @dnd-kit/sortable
   yarn add typescript @types/node --save-dev
+  sed -i "/plugins: \[/a \ \ server: {\n\ \ \ \ host: '0.0.0.0'\n\ \ }," vite.config.ts
+  yarn add -D tailwindcss postcss autoprefixer
+  npx tailwindcss init
+  sed -i "s/content: \[\]/content: \[\".\/src\/\*\*\/\*.{js,jsx,ts,tsx}\"\]/" tailwind.config.js
 fi
+
+# cd ./react
+# # 最初にreactのプロジェクトをインストールする場合=serverフォルダが完全に空っぽ
+# if [ -z "$(ls -A . )" ]; then
+#   # npx create-react-app react_prj --template typescrip
+#   npm create vite@latest my-react-app -- --template react-swc-ts
+#   # npmライブラリはここに追加して下さい。
+#   yarn add react react-dom
+#   yarn add typescript @types/node --save-dev
+# fi
 
 # clone直後はnode_modulesフォルダだけが無い。package.jsonに基づいてインストール
 yarn

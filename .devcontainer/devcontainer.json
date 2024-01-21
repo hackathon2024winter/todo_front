@@ -12,7 +12,9 @@
         "terminal.integrated.defaultProfile.linux": "bash"
       },
       "extensions": [
-        "mhutchie.git-graph"
+        "mhutchie.git-graph",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint"
       ]
     }
   }
