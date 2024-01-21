@@ -1,5 +1,4 @@
-// import './App.css'
-
+import './App.css'
 import { Routes, Route, Link, NavLink } from 'react-router-dom'
 import Home from './routes/home';
 import About from './routes/about';
@@ -31,7 +30,13 @@ function App() {
 
         </li>
         <li>
-          <Link to="/about" className="text-blue-600 visited:text-purple-600">About</Link>
+          {/* <Link to="/about" className="text-blue-600 visited:text-purple-600">About</Link> */}
+          <NavLink
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+            to="/about"
+          >
+            About
+          </NavLink>
         </li>
         <li>
           <Link to="/contact" className="text-blue-600 visited:text-purple-600">Contact</Link>
