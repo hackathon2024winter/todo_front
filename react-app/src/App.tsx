@@ -13,12 +13,19 @@ function App() {
       <ul className="list-disc pl-5">
         <li>
           {/* <Link to="/" className="text-blue-600 visited:text-purple-600">Home</Link> */}
-          <NavLink
+          {/* <NavLink
             style={({ isActive }) => {
               console.log(isActive);
               return isActive ? { fontWeight: 'bold' } : {};
             }}
             to="/">
+            Home
+          </NavLink> */}
+
+          <NavLink
+            style={({ isActive }) => (isActive ? { color: 'blue' } : undefined)}
+            to="/"
+          >
             Home
           </NavLink>
 
