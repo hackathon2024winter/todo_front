@@ -15,7 +15,7 @@ else
   yarn add typescript @types/node --save-dev
   sed -i "/plugins: \[/a \ \ server: {\n\ \ \ \ host: '0.0.0.0'\n\ \ }," vite.config.ts
   yarn add -D tailwindcss postcss autoprefixer
-  npx tailwindcss init
+  npx tailwindcss init -p
   sed -i "s/content: \[\]/content: \[\".\/src\/\*\*\/\*.{js,jsx,ts,tsx}\"\]/" tailwind.config.js
   cp ../index.css ./src/index.css
   cp ../main.tsx ./src/main.tsx

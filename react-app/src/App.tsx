@@ -1,39 +1,23 @@
 // import './App.css'
-import { Routes, Route, Link } from "react-router-dom"
-import Home from "./Pages/Home"
-import Courses from "./Pages/Courses"
-import Live from "./Pages/Live"
-import Contact from "./Pages/Contact"
+
+import { Routes, Route } from 'react-router-dom'
+import Home from './routes/home';
+import About from './routes/about';
+import Contact from './routes/contact';
+import NoMatch from './routes/nomatch';
 
 function App() {
   return (
-    <div className="container">
-      <nav>
-        <ul>
-          <Link to="/" className="list">
-            Home
-          </Link>
-          <Link to="/course" className="list">
-            Courses
-          </Link>
-          <Link to="/live" className="list">
-            Live course
-          </Link>
-          <Link to="/contact" className="list">
-            Contact
-          </Link>
-        </ul>
-      </nav>
-
-      {/* Defining routes path and rendering components as element */}
+    <div className="App">
+      <h1>Hello React Router v6</h1>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/course" element={<Courses />} />
-        <Route path="/live" element={<Live />} />
+        <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NoMatch />} />
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
