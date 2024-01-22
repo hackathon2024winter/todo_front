@@ -22,15 +22,23 @@ function App() {
           </NavLink>
         </li>
         <li>
-          <NavLink
-            className={({ isActive }) => (isActive ? 'active' : undefined)}
-            to="/about"
-          >
-            About
-          </NavLink>
+          <CustomLink to="/about" >About</CustomLink>
         </li>
         <li>
-          <CustomLink to="/contact" >Contact</CustomLink>
+          {/* <NavLink
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+            to="/contact"
+          >
+            Contact
+          </NavLink> */}
+
+          <NavLink
+            className={({ isActive }) => (isActive ? 'active' : '')}
+            to="/contact?api_key=eimaieU9"
+            state={{ detail: 'test' }}
+          >
+            Contact
+          </NavLink>
         </li>
         <li>
           <NavLink
