@@ -44,7 +44,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/posts" element={<Posts />}>
-          <Route path="post" element={<Post />} />
+          <Route path=":postId" element={<Post />} />
         </Route>
         <Route path="*" element={<NoMatch />} />
       </Routes>
