@@ -1,5 +1,5 @@
 import './App.css'
-import { Routes, Route, Link, NavLink, useResolvedPath, useMatch } from 'react-router-dom'
+import { Routes, Route, Link, NavLink, useResolvedPath, useMatch, Outlet } from 'react-router-dom'
 import Home from './routes/home';
 import About from './routes/about';
 import Contact from './routes/contact';
@@ -41,12 +41,14 @@ function App() {
         </li>
       </ul>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/posts" element={<Posts />}>
-          <Route index element={<PostIndex />} />
-          <Route path=":postId" element={<Post />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/posts" element={<Posts />}>
+            <Route index element={<PostIndex />} />
+            <Route path=":postId" element={<Post />} />
+          </Route>
         </Route>
         <Route path="*" element={<NoMatch />} />
       </Routes>
@@ -74,5 +76,12 @@ function CustomLink(props: CustomLinkProps) {
       </Link>
     </div>
   )
+}
 
+const Layout = () => {
+  return (
+    <div className="flex justify-center">
+      <Outlet />
+    </div>
+  )
 }
