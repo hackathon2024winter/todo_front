@@ -5,6 +5,7 @@ import About from './routes/about';
 import Contact from './routes/contact';
 import Posts from './routes/posts';
 import Post from './routes/post'
+import PostIndex from './routes/postindex';
 import NoMatch from './routes/nomatch';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/posts" element={<Posts />}>
+          <Route index element={<PostIndex />} />
           <Route path=":postId" element={<Post />} />
         </Route>
         <Route path="*" element={<NoMatch />} />
