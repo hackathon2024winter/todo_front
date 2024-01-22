@@ -3,6 +3,8 @@ import { Routes, Route, Link, NavLink, useResolvedPath, useMatch } from 'react-r
 import Home from './routes/home';
 import About from './routes/about';
 import Contact from './routes/contact';
+import Posts from './routes/posts';
+import Post from './routes/post'
 import NoMatch from './routes/nomatch';
 
 function App() {
@@ -17,7 +19,6 @@ function App() {
           >
             Home
           </NavLink>
-
         </li>
         <li>
           <NavLink
@@ -30,11 +31,21 @@ function App() {
         <li>
           <CustomLink to="/contact" >Contact</CustomLink>
         </li>
+        <li>
+          <NavLink
+            className={({ isActive }) => (isActive ? 'active' : undefined)}
+            to="/posts">
+            Posts
+          </NavLink>
+        </li>
       </ul>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/posts" element={<Posts />}>
+          <Route path="post" element={<Post />} />
+        </Route>
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </div>
