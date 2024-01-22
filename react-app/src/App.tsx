@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <h1 className='text-3xl font-bold mb-4'>Hello React Router v6</h1>
-      <ul className="list-disc pl-5">
+      <ul className="list-disc pl-5 ml-4">
         <li>
           <NavLink
             style={({ isActive }) => (isActive ? { color: 'blue' } : undefined)}
