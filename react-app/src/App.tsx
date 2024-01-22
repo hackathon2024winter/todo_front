@@ -1,5 +1,5 @@
 import './App.css'
-import { Routes, Route, Link, NavLink } from 'react-router-dom'
+import { Routes, Route, Link, NavLink, useResolvedPath, useMatch } from 'react-router-dom'
 import Home from './routes/home';
 import About from './routes/about';
 import Contact from './routes/contact';
@@ -11,16 +11,6 @@ function App() {
       <h1 className='text-3xl font-bold mb-4'>Hello React Router v6</h1>
       <ul className="list-disc pl-5">
         <li>
-          {/* <Link to="/" className="text-blue-600 visited:text-purple-600">Home</Link> */}
-          {/* <NavLink
-            style={({ isActive }) => {
-              console.log(isActive);
-              return isActive ? { fontWeight: 'bold' } : {};
-            }}
-            to="/">
-            Home
-          </NavLink> */}
-
           <NavLink
             style={({ isActive }) => (isActive ? { color: 'blue' } : undefined)}
             to="/"
@@ -30,7 +20,6 @@ function App() {
 
         </li>
         <li>
-          {/* <Link to="/about" className="text-blue-600 visited:text-purple-600">About</Link> */}
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : undefined)}
             to="/about"
@@ -39,7 +28,7 @@ function App() {
           </NavLink>
         </li>
         <li>
-          <Link to="/contact" className="text-blue-600 visited:text-purple-600">Contact</Link>
+          <CustomLink to="/contact" >Contact</CustomLink>
         </li>
       </ul>
       <Routes>
@@ -53,3 +42,24 @@ function App() {
 }
 
 export default App;
+
+type CustomLinkProps = {
+  children: string;
+  to: string;
+};
+
+function CustomLink(props: CustomLinkProps) {
+  const resolved = useResolvedPath(props.to);
+  const match = useMatch({
+    path: resolved.pathname,
+    end: true,
+  });
+  return (
+    <div>
+      <Link style={{ color: match ? 'blue' : '' }} to={props.to}>
+        {props.children}
+      </Link>
+    </div>
+  )
+
+}
