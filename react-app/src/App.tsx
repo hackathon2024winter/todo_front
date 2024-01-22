@@ -44,7 +44,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route element={<Layout2 />}>
+            <Route path="/contact" element={<Contact />} />
+          </Route>
           <Route path="/posts" element={<Posts />}>
             <Route index element={<PostIndex />} />
             <Route path=":postId" element={<Post />} />
@@ -81,6 +83,14 @@ function CustomLink(props: CustomLinkProps) {
 const Layout = () => {
   return (
     <div className="flex justify-center">
+      <Outlet />
+    </div>
+  )
+}
+
+const Layout2 = () => {
+  return (
+    <div className="flex justify-end">
       <Outlet />
     </div>
   )
