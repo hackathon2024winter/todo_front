@@ -42,6 +42,14 @@ function Contact() {
     }
   };
 
+  const searchProducts = () => {
+    return products.filter((product) => {
+      return product.product_name.includes(
+        searchParams.get('product_name') || ''
+      );
+    });
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold mt-3 mb-3">Contact</h2>
@@ -50,11 +58,12 @@ function Contact() {
         type="text" onChange={handleChange} value={paramsValue} />
 
       <ul className="list-disc pl-5 ml-4">
-        {products.map((product) => (
+        {searchProducts().map((product) => (
           <li key={product.id}>
             {product.product_name}/{product.price}
           </li>
         ))}
+
       </ul>
     </div>
   );
