@@ -25,13 +25,6 @@ function App() {
           <CustomLink to="/about" >About</CustomLink>
         </li>
         <li>
-          {/* <NavLink
-            className={({ isActive }) => (isActive ? 'active' : undefined)}
-            to="/contact"
-          >
-            Contact
-          </NavLink> */}
-
           <NavLink
             className={({ isActive }) => (isActive ? 'active' : '')}
             to="/contact?api_key=eimaieU9"
@@ -85,7 +78,7 @@ function CustomLink(props: CustomLinkProps) {
         {props.children}
       </Link>
     </div>
-  )
+  );
 }
 
 const Layout = () => {
