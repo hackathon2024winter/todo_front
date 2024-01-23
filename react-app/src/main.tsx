@@ -1,32 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, } from 'react-router-dom';
 import Root from './routes/root';
 import Home from './routes/home';
 import About from './routes/about';
 import Contact from './routes/contact';
+import ErrorPage from './routes/error-page';
+import Posts from './routes/posts'
+import { loader as postLoader } from './utilities/loader'
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Root />,
-    children: [
-      {
-        index: true,
-        element: <Home />
-      },
-      {
-        path: 'about',
-        element: <About />
-      },
-      {
-        path: 'contact',
-        element: <Contact />,
-      },
-    ]
-  }
-]);
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
+      <Route index element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/posts" element={<Posts />} loader={postLoader} />
+    </Route>
+  )
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(

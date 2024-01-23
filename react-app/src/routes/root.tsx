@@ -19,6 +19,11 @@ const Root = () => {
             className="text-blue-600 visited:text-pink-300"
             to="/contact">Contact</Link>
         </li>
+        <li>
+          <Link
+            className="text-blue-600 visited:text-pink-300"
+            to="/posts">Posts</Link>
+        </li>
       </ul>
       <Outlet />
     </>
