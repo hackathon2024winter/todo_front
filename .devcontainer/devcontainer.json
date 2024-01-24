@@ -1,7 +1,7 @@
 {
   "name": "todo_front",
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "nextjs",
+  "service": "reactapp",
   "workspaceFolder": "/home/appuser/devcon",
   "shutdownAction": "stopCompose",
   "remoteUser": "appuser",

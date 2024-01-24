@@ -1,14 +1,14 @@
 import { RouterProvider, Route, createBrowserRouter, createRoutesFromElements, } from 'react-router-dom';
-import Root from './routes/root'
-import ErrorPage from './routes/error-page';
-import Home from './routes/home';
-import About from './routes/about';
-import Contact from './routes/contact';
-import Posts from './routes/posts'
-import Post from './routes/post'
-import PostIndex from './routes/postindex';
-import { PostsLoader as posts_loader } from './utilities/postsloader'
-import { PostLoader as post_loader } from './utilities/postloader'
+import Root from './routes/Root'
+import ErrorPage from './routes/ErrorPage';
+import Home from './routes/Home';
+import About from './routes/About';
+import Contact from './routes/Contact';
+import Posts from './routes/Posts'
+import Post from './routes/Post'
+import PostIndex from './routes/PostIndex';
+import { PostsLoader } from './utilities/PostsLoader'
+import { PostLoader } from './utilities/PostLoader'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,8 +17,8 @@ const router = createBrowserRouter(
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/posts" element={<Posts />} errorElement={<ErrorPage />}>
-        <Route index element={<PostIndex />} loader={posts_loader} />
-        <Route path=":postId" element={<Post />} loader={post_loader} errorElement={<ErrorPage />} />
+        <Route index element={<PostIndex />} loader={PostsLoader} />
+        <Route path=":postId" element={<Post />} loader={PostLoader} errorElement={<ErrorPage />} />
       </Route>
     </Route >
   )
