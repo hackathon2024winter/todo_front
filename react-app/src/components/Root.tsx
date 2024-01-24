@@ -1,6 +1,7 @@
+import { FC } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
-const Root = () => {
+const Root: FC = () => {
   return (
     <>
       <ul className='list-disc pl-5 ml-4'>
@@ -28,7 +29,6 @@ const Root = () => {
       <Outlet />
     </>
   )
-
 }
 
 export default Root

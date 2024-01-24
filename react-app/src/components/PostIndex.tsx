@@ -1,7 +1,8 @@
+import { FC } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 import { PostData } from '../utilities/type'
 
-function PostIndex() {
+const PostIndex: FC = () => {
   // 戻り値unknownをPostData[]に変換
   const { posts } = useLoaderData() as { posts: PostData[] };
   return (
