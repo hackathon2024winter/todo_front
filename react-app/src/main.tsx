@@ -10,7 +10,8 @@ import ErrorPage from './routes/error-page';
 import Posts from './routes/posts'
 import Post from './routes/post'
 import PostIndex from './routes/postindex';
-import { loader as postLoader } from './utilities/loader'
+import { PostsLoader as posts_loader } from './utilities/postsloader'
+import { PostLoader as post_loader } from './utilities/postloader'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,8 +20,8 @@ const router = createBrowserRouter(
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/posts" element={<Posts />} >
-        <Route index element={<PostIndex />} loader={postLoader} />
-        <Route path=":postId" element={<Post />} />
+        <Route index element={<PostIndex />} loader={posts_loader} />
+        <Route path=":postId" element={<Post />} loader={post_loader} />
       </Route>
     </Route>
   )
