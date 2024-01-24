@@ -19,9 +19,9 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/posts" element={<Posts />} >
+      <Route path="/posts" element={<Posts />} errorElement={<ErrorPage />}>
         <Route index element={<PostIndex />} loader={posts_loader} />
-        <Route path=":postId" element={<Post />} loader={post_loader} />
+        <Route path=":postId" element={<Post />} loader={post_loader} errorElement={<ErrorPage />} />
       </Route>
     </Route>
   )

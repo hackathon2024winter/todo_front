@@ -6,22 +6,22 @@ const Root = () => {
       <ul className='list-disc pl-5 ml-4'>
         <li>
           <Link
-            className="text-blue-600 visited:text-pink-300"
+            className="text-blue-600 visited:text-purple-600"
             to="/">Home</Link>
         </li>
         <li>
           <Link
-            className="text-blue-600 visited:text-pink-300"
+            className="text-blue-600 visited:text-purple-600"
             to="/about">About</Link>
         </li>
         <li>
           <Link
-            className="text-blue-600 visited:text-pink-300"
+            className="text-blue-600 visited:text-purple-600"
             to="/contact">Contact</Link>
         </li>
         <li>
           <Link
-            className="text-blue-600 visited:text-pink-300"
+            className="text-blue-600 visited:text-purple-600"
             to="/posts">Posts</Link>
         </li>
       </ul>

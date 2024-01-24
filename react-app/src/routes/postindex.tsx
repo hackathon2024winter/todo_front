@@ -8,7 +8,9 @@ function PostIndex() {
     <ul className='list-disc pl-5 ml-4'>
       {posts.map((post) => (
         <li key={post.id}>
-          <Link to={`/posts/${post.id}`}>
+          <Link
+            className="text-blue-600 visited:text-purple-600"
+            to={`/posts/${post.id}`}>
             {post.id}:{post.title}
           </Link>
         </li>
