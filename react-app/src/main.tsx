@@ -8,6 +8,8 @@ import About from './routes/about';
 import Contact from './routes/contact';
 import ErrorPage from './routes/error-page';
 import Posts from './routes/posts'
+import Post from './routes/post'
+import PostIndex from './routes/postindex';
 import { loader as postLoader } from './utilities/loader'
 
 const router = createBrowserRouter(
@@ -16,7 +18,10 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/posts" element={<Posts />} loader={postLoader} />
+      <Route path="/posts" element={<Posts />} >
+        <Route index element={<PostIndex />} loader={postLoader} />
+        <Route path=":postId" element={<Post />} />
+      </Route>
     </Route>
   )
 );
