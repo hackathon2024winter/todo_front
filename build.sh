@@ -11,7 +11,7 @@ else
   npm create vite@latest react-app -- --template react-swc-ts  
   cd ./react-app
   # npmライブラリはここに追加して下さい。
-  yarn add react react-dom react-router-dom sass @dnd-kit/core @dnd-kit/sortable
+  yarn add react react-dom react-router-dom classnames sass @dnd-kit/core @dnd-kit/sortable
   yarn add typescript @types/node --save-dev
   sed -i "/plugins: \[/a \ \ server: {\n\ \ \ \ host: '0.0.0.0'\n\ \ }," vite.config.ts
   yarn add -D tailwindcss postcss autoprefixer
