@@ -3,20 +3,13 @@ import { DroppableProps } from "../utilities/types";
 import { useDroppable } from "@dnd-kit/core";
 
 const Droppable: FC<DroppableProps> = ({ id, dragging, children }) => {
-  const { isOver, setNodeRef } = useDroppable({
-    id,
-  });
+  const { isOver, setNodeRef } = useDroppable({ id });
+
+  // 子要素が関数であると仮定する
+  const renderChildren = typeof children === 'function' ? children({ isOver, dragging }) : children;
 
   return (
-    <div
-      ref={setNodeRef}
-      style={{
-        backgroundColor: isOver ? "lightGreen" : undefined,
-        opacity: dragging ? 0.5 : undefined
-      }}
-    >
-      {children}
-    </div>
+    <div ref={setNodeRef}>{renderChildren}</div>
   );
 };
 

@@ -32,12 +32,19 @@ const Contact: FC = () => {
         onDragCancel={() => setIsDragging(false)}
       >
         {parent === null ? card : null}
-        <Droppable key='A' id='A' dragging={isDragging} children={
-          <div className="w-48 h-48 bg-orange-400">
-            {parent === 'A' ? card : null}
-          </div>
-        }
-        />
+        <Droppable key='A' id='A' dragging={isDragging}>
+          {({ isOver, dragging }) => (
+            <div
+              style={{
+                backgroundColor: isOver ? "lightGreen" : undefined,
+                opacity: dragging ? 0.5 : undefined,
+              }}
+              className="w-48 h-48 bg-orange-400"
+            >
+              {parent === 'A' ? card : null}
+            </div>
+          )}
+        </Droppable>
       </DndContext>
     </>
   )

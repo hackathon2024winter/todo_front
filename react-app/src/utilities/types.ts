@@ -15,5 +15,5 @@ export type DraggableProps = {
 export interface DroppableProps {
   id: UniqueIdentifier;
   dragging: boolean;
-  children: ReactNode;
+  children: (props: { isOver: boolean; dragging: boolean }) => React.ReactNode;
 }
