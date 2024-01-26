@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from 'react-router-dom';
-import { PostData } from './type';
+import { PostData } from './types';
 
 export async function loadPost({ params }: LoaderFunctionArgs) {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.postId}`);

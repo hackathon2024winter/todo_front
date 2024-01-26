@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { PostData } from '../utilities/type'
+import { PostData } from '../utilities/types'
 
 const Post: FC = () => {
   const { post } = useLoaderData() as { post: PostData }

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
-import { PostData } from '../utilities/type'
+import { PostData } from '../utilities/types'
 
 const PostIndex: FC = () => {
   // 戻り値unknownをPostData[]に変換

@@ -1,4 +1,4 @@
-import { PostData } from './type';
+import { PostData } from './types';
 
 export async function loadPosts() {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts`);

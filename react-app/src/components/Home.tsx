@@ -27,7 +27,6 @@ const Home: FC<Props> = ({
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [parent, setParent] = useState<UniqueIdentifier | null>(null);
-
   const item = <DraggableItem />;
 
   return (
