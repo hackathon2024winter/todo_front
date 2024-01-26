@@ -4,7 +4,7 @@ import { DraggableProps } from "../utilities/types";
 
 const Card: FC<DraggableProps> = ({ id, children }) => {
   return (
-    <div style={{ marginBottom: '40px' }}>
+    <div className="mb-10">
       <Draggable id={id} children={children} />
     </div>
   );

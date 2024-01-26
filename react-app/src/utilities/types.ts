@@ -1,3 +1,4 @@
+import { UniqueIdentifier } from "@dnd-kit/core";
 import { ReactNode } from "react";
 
 export interface PostData {
@@ -8,5 +9,11 @@ export interface PostData {
 
 export type DraggableProps = {
   id: string;
+  children: ReactNode;
+}
+
+export interface DroppableProps {
+  id: UniqueIdentifier;
+  dragging: boolean;
   children: ReactNode;
 }
