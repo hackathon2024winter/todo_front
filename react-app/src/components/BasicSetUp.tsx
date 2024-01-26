@@ -9,7 +9,7 @@ import {
 import Card from "./Card";
 import Droppable from "./Droppable";
 
-const Contact: FC = () => {
+const BasicSetUp: FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [parent, setParent] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
@@ -24,14 +24,14 @@ const Contact: FC = () => {
         className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700"
         onClick={() => console.log("hello")}
       >
-        Contact
+        Basic SetUp
       </button>
     </div>
   } />
 
   return (
     <>
-      <h2 className="text-2xl font-semibold mt-3 mb-3">Contact</h2>
+      <h2 className="text-2xl font-semibold mt-3 mb-3">Basic SetUp</h2>
       <DndContext
         sensors={sensors}
         onDragStart={() => setIsDragging(true)}
@@ -59,4 +59,4 @@ const Contact: FC = () => {
     </>
   )
 }
-export default Contact;
+export default BasicSetUp;

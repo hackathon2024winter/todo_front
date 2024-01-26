@@ -5,13 +5,13 @@ import { Droppable } from "../components_story/Droppable";
 import { DraggableOverlay } from "../components_story/Draggable";
 import { GridContainer } from "../components_story/GridContainer";
 
-const About: FC = () => {
+const StorySimple: FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [parent, setParent] = useState<UniqueIdentifier | null>(null);
 
   return (
     <>
-      <h2 className="text-2xl font-semibold mt-3 mb-3">About</h2>
+      <h2 className="text-2xl font-semibold mt-3 mb-3">Story Simple</h2>
       <DndContext
         onDragStart={() => setIsDragging(true)}
         onDragEnd={({ over }) => {
@@ -31,4 +31,4 @@ const About: FC = () => {
     </>
   );
 }
-export default About;
+export default StorySimple;

@@ -8,17 +8,17 @@ const Root: FC = () => {
         <li>
           <Link
             className="text-blue-600 visited:text-purple-600"
-            to="/">Home</Link>
+            to="/">Original Story</Link>
         </li>
         <li>
           <Link
             className="text-blue-600 visited:text-purple-600"
-            to="/about">About</Link>
+            to="/storysimple">Story Simple</Link>
         </li>
         <li>
           <Link
             className="text-blue-600 visited:text-purple-600"
-            to="/contact">Contact</Link>
+            to="/basicsetup">BasicSetUp</Link>
         </li>
         <li>
           <Link

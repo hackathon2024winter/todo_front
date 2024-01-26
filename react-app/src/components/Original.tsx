@@ -31,7 +31,7 @@ const Home: FC<Props> = ({
 
   return (
     <>
-      <h2 className="text-2xl font-semibold mt-3 mb-3">Home</h2>
+      <h2 className="text-2xl font-semibold mt-3 mb-3">Original Story</h2>
       <DndContext
         collisionDetection={collisionDetection}
         modifiers={parent === null ? undefined : modifiers}
