@@ -1,11 +1,20 @@
 import { FC, useState } from "react";
-import { DndContext, UniqueIdentifier } from "@dnd-kit/core";
+import {
+  DndContext,
+  useSensor,
+  useSensors,
+  MouseSensor,
+  UniqueIdentifier
+} from "@dnd-kit/core";
 import Card from "./Card";
 import Droppable from "./Droppable";
 
 const Contact: FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [parent, setParent] = useState<UniqueIdentifier | null>(null);
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 5 } })
+  );
 
   const card = <Card id={"draggableA"} children={
     <div
@@ -24,6 +33,7 @@ const Contact: FC = () => {
     <>
       <h2 className="text-2xl font-semibold mt-3 mb-3">Contact</h2>
       <DndContext
+        sensors={sensors}
         onDragStart={() => setIsDragging(true)}
         onDragEnd={({ over }) => {
           setParent(over ? over.id : null);
