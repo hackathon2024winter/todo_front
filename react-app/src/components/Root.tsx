@@ -23,6 +23,11 @@ const Root: FC = () => {
         <li>
           <Link
             className="text-blue-600 visited:text-purple-600"
+            to="/zennver">Zenn Ver</Link>
+        </li>
+        <li>
+          <Link
+            className="text-blue-600 visited:text-purple-600"
             to="/posts">Posts</Link>
         </li>
       </ul>

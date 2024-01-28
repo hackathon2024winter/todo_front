@@ -15,7 +15,7 @@ export const Draggable: FC<DraggableProps> = ({ id, children }) => {
     id
   });
 
-  const transformStyle = transform ? `translate(${transform.x}px,${transform.y}px)` : undefined;
+  const transformStyle = transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined;
 
   return (
     <div
@@ -23,10 +23,12 @@ export const Draggable: FC<DraggableProps> = ({ id, children }) => {
       {...attributes}
       {...listeners}
       style={{
+        position: isDragging ? "absolute" : "relative", // ドラッグ中はabsoluteにする
         transform: transformStyle,
         touchAction: 'none',
         cursor: isDragging ? "grabbing" : "grab",
-        opacity: isDragging ? 0.5 : undefined,
+        // opacity: isDragging ? 0.5 : 1,
+        zIndex: isDragging ? "auto" : undefined // ドラッグ中のdomだけz-indexを持つので最上位になる。
       }}
     >
       {children}

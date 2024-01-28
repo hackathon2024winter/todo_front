@@ -4,7 +4,8 @@ import {
   useSensor,
   useSensors,
   MouseSensor,
-  UniqueIdentifier
+  UniqueIdentifier,
+  pointerWithin
 } from "@dnd-kit/core";
 import Card from "./Card";
 import Droppable from "./Droppable";
@@ -34,6 +35,7 @@ const BasicSetUp: FC = () => {
       <h2 className="text-2xl font-semibold mt-3 mb-3">Basic SetUp</h2>
       <DndContext
         sensors={sensors}
+        collisionDetection={pointerWithin}
         onDragStart={() => setIsDragging(true)}
         onDragEnd={({ over }) => {
           setParent(over ? over.id : null);
@@ -48,8 +50,14 @@ const BasicSetUp: FC = () => {
               style={{
                 backgroundColor: isOver ? "lightGreen" : undefined,
                 opacity: dragging ? 0.5 : undefined,
+                position: "relative",
+                paddingTop: "80px",
+                textAlign: "center",
+                borderRadius: "10px",
+                width: "340px",
+                height: "340px",
               }}
-              className="w-48 h-48 bg-orange-400"
+              className="bg-gray-300 border-green-700 border-4"
             >
               {parent === 'A' ? card : null}
             </div>
@@ -60,3 +68,4 @@ const BasicSetUp: FC = () => {
   )
 }
 export default BasicSetUp;
+

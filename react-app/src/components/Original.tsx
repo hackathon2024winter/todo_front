@@ -21,7 +21,7 @@ interface Props {
 }
 
 const Home: FC<Props> = ({
-  containers = ['A'],
+  containers = ['A', 'B', 'C'],
   collisionDetection,
   modifiers,
 }) => {
