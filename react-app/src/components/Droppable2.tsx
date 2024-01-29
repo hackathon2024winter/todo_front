@@ -13,8 +13,9 @@ const Droppable: FC<DroppableProp> = ({ children, id }) => {
       ref={setNodeRef}
       style={{
         width: "200px",
+        height: "300px",
         backgroundColor: isOver ? "lightgreen" : undefined,
-        minHeight: "300px",
+        // minHeight: "300px",
         overflowX: "auto",
         padding: 2,
         border: "1px solid black"

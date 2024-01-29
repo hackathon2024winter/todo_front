@@ -1,13 +1,18 @@
 import { DndContext, DragOverlay, DragStartEvent, DragEndEvent, MouseSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
 import { FC, useState } from "react";
 import Draggable from "./Draggable2";
-import ScrollableList from "./ScrollableList";
 import Droppable from "./Droppable2";
 
 const Overlay: FC = () => {
-  const [items] = useState(['1', '2', '3', '4', '5']);
+  const [itemLocations, setItemLocations] = useState({
+    '1': 'dropAreaA',
+    '2': 'dropAreaA',
+    '3': 'dropAreaA',
+    '4': 'dropAreaA',
+    '5': 'dropAreaA',
+  });
+
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-  const [parent, setParent] = useState<UniqueIdentifier | null>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 5 } })
@@ -18,13 +23,12 @@ const Overlay: FC = () => {
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over) {
+      setItemLocations(prev => ({ ...prev, [active.id]: over.id }));
+    }
     setActiveId(null);
-    setParent(event.over ? event.over.id : null);
-  }
-
-  // function handleDragEnd() {
-  //   setActiveId(null);
-  // }
+  };
 
   const card = (id: string) => <Draggable id={id} children={
     <div className="mb-2">
@@ -49,9 +53,6 @@ const Overlay: FC = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="mb-5 border-black border-2">
-          {parent === null ? card("hahaha") : null}
-        </div>
 
         <div style={{
           display: 'flex',
@@ -59,26 +60,38 @@ const Overlay: FC = () => {
           gap: '40px'
         }}>
           <Droppable id="dropAreaA" >
-            <ScrollableList>
-              {items.map(id =>
+            {Object.entries(itemLocations).map(([id, location]) =>
+              location === 'dropAreaA' ? (
                 <Draggable key={id} id={id}>
                   {card(id)}
                 </Draggable>
-              )}
-            </ScrollableList>
-            {parent === 'dropAreaA' ? card("hahaha") : null}
+              ) : null
+            )}
+
           </Droppable>
           <Droppable id="dropAreaB" >
-            {parent === 'dropAreaB' ? card("hahaha") : null}
+            {Object.entries(itemLocations).map(([id, location]) =>
+              location === 'dropAreaB' ? (
+                <Draggable key={id} id={id}>
+                  {card(id)}
+                </Draggable>
+              ) : null
+            )}
+          </Droppable>
+
+          <Droppable id="dropAreaC" >
+            {Object.entries(itemLocations).map(([id, location]) =>
+              location === 'dropAreaC' ? (
+                <Draggable key={id} id={id}>
+                  {card(id)}
+                </Draggable>
+              ) : null
+            )}
           </Droppable>
 
           <DragOverlay>
             {typeof activeId === 'string' ? card(activeId) : null}
           </DragOverlay>
-
-          <Droppable id="dropAreaC" >
-            {parent === 'dropAreaC' ? card("hahaha") : null}
-          </Droppable>
 
         </div>
       </DndContext>
