@@ -27,7 +27,7 @@ export const Draggable: FC<DraggableProps> = ({ id, children }) => {
         transform: transformStyle,
         touchAction: 'none',
         cursor: isDragging ? "grabbing" : "grab",
-        // opacity: isDragging ? 0.5 : 1,
+        // opacity: isDragging ? 0.5 : 1, //ドラッグ中に最上位にくるようにしたので、不要
         zIndex: isDragging ? "auto" : undefined // ドラッグ中のdomだけz-indexを持つので最上位になる。
       }}
     >
