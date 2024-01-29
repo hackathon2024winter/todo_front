@@ -1,7 +1,7 @@
 import { DndContext, DragOverlay, DragStartEvent, DragEndEvent, MouseSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
 import { FC, useState } from "react";
-import Draggable from "./Draggable2";
-import Droppable from "./Droppable2";
+import Draggable from "./Draggable";
+import Droppable from "./Droppable";
 
 const Overlay: FC = () => {
   const [itemLocations, setItemLocations] = useState({

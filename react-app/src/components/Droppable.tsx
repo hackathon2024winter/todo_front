@@ -1,17 +1,44 @@
-import { FC } from "react";
-import { DroppableProps } from "../utilities/types";
 import { useDroppable } from "@dnd-kit/core";
+import { FC, ReactNode } from "react";
 
-const Droppable: FC<DroppableProps> = ({ id, dragging, children }) => {
-  const { isOver, setNodeRef } = useDroppable({ id });
+type DroppableProp = {
+  id: string;
+  children: ReactNode;
+}
 
-  // 子要素が関数であると仮定する
-  const renderChildren = typeof children === 'function' ? children({ isOver, dragging }) : children;
-
+const Droppable: FC<DroppableProp> = ({ children, id }) => {
+  const { setNodeRef, isOver } = useDroppable({ id });
   return (
-    <div ref={setNodeRef}>{renderChildren}</div>
-  );
-};
+    <div
+      ref={setNodeRef}
+      style={{
+        width: "200px",
+        height: "300px",
+        backgroundColor: isOver ? "lightgreen" : undefined,
+        // minHeight: "300px",
+        overflowX: "auto",
+        padding: 2,
+        border: "1px solid black"
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px"
+        }}
+      >
+        <span
+          style={{
+            fontWeight: "bold"
+          }}
+        >
+          ドロップエリア
+        </span>
+        {children}
+      </div>
+    </div>
+  )
+}
 
 export default Droppable;
-

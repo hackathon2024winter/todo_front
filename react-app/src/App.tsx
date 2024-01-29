@@ -1,10 +1,7 @@
 import { RouterProvider, Route, createBrowserRouter, createRoutesFromElements, } from 'react-router-dom';
 import Root from './components/Root'
 import ErrorPage from './components/ErrorPage';
-import Original from './components/Original';
-import StorySimple from './components/StorySimple';
-import BasicSetUp from './components/BasicSetUp';
-import ZennVer from './components/ZennVer';
+import Home from './components/Home';
 import Overlay from './components/Overlay'
 import Posts from './components/Posts'
 import Post from './components/Post'
@@ -15,10 +12,7 @@ import { loadPost } from './utilities/load_post'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
-      <Route index element={<Original />} />
-      <Route path="/storysimple" element={<StorySimple />} />
-      <Route path="/basicsetup" element={<BasicSetUp />} />
-      <Route path="/zennver" element={<ZennVer />} />
+      <Route index element={<Home />} />
       <Route path="/overlay" element={<Overlay />} />
       <Route path="/posts" element={<Posts />} errorElement={<ErrorPage />}>
         <Route index element={<PostIndex />} loader={loadPosts} />

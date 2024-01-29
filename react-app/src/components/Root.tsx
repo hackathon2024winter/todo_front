@@ -8,22 +8,7 @@ const Root: FC = () => {
         <li>
           <Link
             className="text-blue-600 visited:text-purple-600"
-            to="/">Original Story</Link>
-        </li>
-        <li>
-          <Link
-            className="text-blue-600 visited:text-purple-600"
-            to="/storysimple">Story Simple</Link>
-        </li>
-        <li>
-          <Link
-            className="text-blue-600 visited:text-purple-600"
-            to="/basicsetup">BasicSetUp</Link>
-        </li>
-        <li>
-          <Link
-            className="text-blue-600 visited:text-purple-600"
-            to="/zennver">Zenn Ver</Link>
+            to="/">Home</Link>
         </li>
         <li>
           <Link
