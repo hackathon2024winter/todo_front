@@ -2,8 +2,8 @@ import { FC, useState } from "react";
 import { DndContext, pointerWithin, useSensor, useSensors, MouseSensor, UniqueIdentifier } from "@dnd-kit/core";
 
 // import Card from "./Card";
-import { Droppable } from "./Droppable2";
-import { Draggable } from "./Draggable";
+import Droppable from "./Droppable2";
+import Draggable from "./Draggable";
 
 const ZennVer: FC = () => {
   const [parent, setParent] = useState<UniqueIdentifier | null>(null);

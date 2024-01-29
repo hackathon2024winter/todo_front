@@ -3,7 +3,7 @@ import { useDraggable } from "@dnd-kit/core"
 import { DraggableProps } from "../utilities/types";
 
 
-export const Draggable: FC<DraggableProps> = ({ id, children }) => {
+const Draggable: FC<DraggableProps> = ({ id, children }) => {
   // useDraggableを使って必要な値をもらう
   const {
     setNodeRef,
@@ -35,3 +35,5 @@ export const Draggable: FC<DraggableProps> = ({ id, children }) => {
     </div>
   );
 };
+
+export default Draggable;

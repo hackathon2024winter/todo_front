@@ -6,7 +6,7 @@ type DroppableProp = {
   children: ReactNode;
 }
 
-export const Droppable: FC<DroppableProp> = ({ children, id }) => {
+const Droppable: FC<DroppableProp> = ({ children, id }) => {
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
     <div
@@ -39,3 +39,5 @@ export const Droppable: FC<DroppableProp> = ({ children, id }) => {
     </div>
   )
 }
+
+export default Droppable;
