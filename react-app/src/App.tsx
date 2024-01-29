@@ -5,6 +5,7 @@ import Original from './components/Original';
 import StorySimple from './components/StorySimple';
 import BasicSetUp from './components/BasicSetUp';
 import ZennVer from './components/ZennVer';
+import Overlay from './components/Overlay'
 import Posts from './components/Posts'
 import Post from './components/Post'
 import PostIndex from './components/PostIndex';
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
       <Route path="/storysimple" element={<StorySimple />} />
       <Route path="/basicsetup" element={<BasicSetUp />} />
       <Route path="/zennver" element={<ZennVer />} />
+      <Route path="/overlay" element={<Overlay />} />
       <Route path="/posts" element={<Posts />} errorElement={<ErrorPage />}>
         <Route index element={<PostIndex />} loader={loadPosts} />
         <Route path=":postId" element={<Post />} loader={loadPost} errorElement={<ErrorPage />} />
