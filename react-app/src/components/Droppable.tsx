@@ -2,7 +2,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { FC, ReactNode } from "react";
 
 type DroppableProp = {
-  id: string;
+  id: number;
   children: ReactNode;
 }
 

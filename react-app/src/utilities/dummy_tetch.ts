@@ -1,7 +1,8 @@
+import { ToDoList } from "./types";
 
 export const dummyFetch = async () => {
   const dummyJson = {
-    todos: [
+    items: [
       {
         "card_id": 1,
         "col_id": 1,
@@ -105,5 +106,5 @@ export const dummyFetch = async () => {
     ]
   };
 
-  return dummyJson;
+  return dummyJson as ToDoList;
 }

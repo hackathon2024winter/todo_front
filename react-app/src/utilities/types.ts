@@ -5,7 +5,7 @@ export interface PostData {
 }
 
 // Todoの型を定義
-export interface ToDoProp {
+export interface ToDoItem {
   card_id: number;
   col_id: number;
   card_name: string;
@@ -16,6 +16,7 @@ export interface ToDoProp {
   description: string;
 }
 
-export interface ToDoProps {
-  todos: ToDoProp[];
+// ToDoリストを表す型
+export interface ToDoList {
+  items: ToDoItem[]; // ToDoItemの配列
 }
