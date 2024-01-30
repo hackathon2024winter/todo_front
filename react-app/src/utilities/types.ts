@@ -1,19 +1,21 @@
-import { UniqueIdentifier } from "@dnd-kit/core";
-import { ReactNode } from "react";
-
 export interface PostData {
   id: number;
   title: string;
   body: string;
 }
 
-export type DraggableProps = {
-  id: string;
-  children: ReactNode;
+// Todoの型を定義
+export interface ToDoProp {
+  card_id: number;
+  col_id: number;
+  card_name: string;
+  col_name: string;
+  input_date: string;
+  due_date: string;
+  color: string;
+  description: string;
 }
 
-export interface DroppableProps {
-  id: UniqueIdentifier;
-  dragging: boolean;
-  children: (props: { isOver: boolean; dragging: boolean }) => React.ReactNode;
+export interface ToDoProps {
+  todos: ToDoProp[];
 }

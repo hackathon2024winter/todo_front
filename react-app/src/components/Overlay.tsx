@@ -1,16 +1,24 @@
 import { DndContext, DragOverlay, DragStartEvent, DragEndEvent, MouseSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
+import { ToDoProps } from "../utilities/types";
+import { dummyFetch } from "../utilities/dummy_tetch";
 
 const Overlay: FC = () => {
-  const [itemLocations, setItemLocations] = useState({
-    '1': 'dropAreaA',
-    '2': 'dropAreaA',
-    '3': 'dropAreaA',
-    '4': 'dropAreaA',
-    '5': 'dropAreaA',
-  });
+  const [todos, setTodos] = useState<ToDoProps | null>(null);
+  console.log(todos)
+
+  useEffect(() => {
+    // dummyFetchを呼び出し、結果を状態に設定
+    const fetchData = async () => {
+      const response = await dummyFetch();
+      // response.data を ToDoProps 型の todos プロパティにマッピング
+      setTodos({ todos: response.todos });
+    };
+
+    fetchData();
+  }, []); // 空の依存配列を使用して、コンポーネントのマウント時に一度だけ実行する
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
@@ -30,7 +38,21 @@ const Overlay: FC = () => {
     setActiveId(null);
   };
 
-  const card = (id: string) => <Draggable id={id} children={
+  const cardLocations = () => {
+    // const locations = await fetch(url)
+    const locations = {
+      1: 'dropAreaA',
+      2: 'dropAreaA',
+      3: 'dropAreaA',
+      4: 'dropAreaA',
+      5: 'dropAreaA',
+    }
+    return locations
+  }
+
+  const [itemLocations, setItemLocations] = useState(cardLocations);
+
+  const card = (id: string) => <Draggable id={Number(id)} children={
     <div className="mb-2">
       <div
         className="w-fit h-fit p-4 m-2 border-2 rounded-lg border-green-900 bg-green-500 select-none"
@@ -62,17 +84,16 @@ const Overlay: FC = () => {
           <Droppable id="dropAreaA" >
             {Object.entries(itemLocations).map(([id, location]) =>
               location === 'dropAreaA' ? (
-                <Draggable key={id} id={id}>
+                <Draggable key={id} id={Number(id)}>
                   {card(id)}
                 </Draggable>
               ) : null
             )}
-
           </Droppable>
           <Droppable id="dropAreaB" >
             {Object.entries(itemLocations).map(([id, location]) =>
               location === 'dropAreaB' ? (
-                <Draggable key={id} id={id}>
+                <Draggable key={id} id={Number(id)}>
                   {card(id)}
                 </Draggable>
               ) : null
@@ -82,15 +103,15 @@ const Overlay: FC = () => {
           <Droppable id="dropAreaC" >
             {Object.entries(itemLocations).map(([id, location]) =>
               location === 'dropAreaC' ? (
-                <Draggable key={id} id={id}>
+                <Draggable key={id} id={Number(id)}>
                   {card(id)}
                 </Draggable>
               ) : null
             )}
           </Droppable>
 
-          <DragOverlay>
-            {typeof activeId === 'string' ? card(activeId) : null}
+          <DragOverlay >
+            {typeof activeId === 'number' ? card(String(activeId)) : null}
           </DragOverlay>
 
         </div>
