@@ -1,7 +1,7 @@
 import { DndContext, DragOverlay, DragStartEvent, DragEndEvent, MouseSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
 import { FC, useEffect, useState } from "react";
 import { ToDoList } from "../utilities/types";
-import { dummyFetch } from "../utilities/dummy_tetch";
+import { dummyFetch } from "../utilities/dummy_fetch";
 import Todo from "./Todo"
 import ToDoContainer from "./ToDoCotainer";
 
@@ -62,11 +62,9 @@ const Overlay: FC = () => {
         onDragEnd={handleDragEnd}
       >
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '40px'
-        }}>
+        <div
+          className="flex flex-row gap-10"
+        >
           <ToDoContainer id={1} >
             {todos && todos.items.map((todo) =>
               todo.col_id === 1 ? <Todo key={todo.card_id} item={todo} /> : null
