@@ -1,7 +1,26 @@
+import { ReactNode } from "react";
+
 export interface PostData {
   id: number;
   title: string;
   body: string;
+}
+
+export interface DraggableItem {
+  id: number;
+  children: ReactNode
+}
+
+export interface DroppableItem {
+  id: number;
+  children: ReactNode;
+  className: string;
+  onIsOverChange?: (isOver: boolean) => void;
+}
+
+export interface ToDoContainerItem {
+  id: number;
+  children: ReactNode;
 }
 
 // Todoの型を定義

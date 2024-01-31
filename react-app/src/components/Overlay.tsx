@@ -1,9 +1,9 @@
 import { DndContext, DragOverlay, DragStartEvent, DragEndEvent, MouseSensor, UniqueIdentifier, useSensor, useSensors } from "@dnd-kit/core";
 import { FC, useEffect, useState } from "react";
-import Droppable from "./Droppable";
 import { ToDoList } from "../utilities/types";
 import { dummyFetch } from "../utilities/dummy_tetch";
 import Todo from "./Todo"
+import ToDoContainer from "./ToDoCotainer";
 
 const Overlay: FC = () => {
   const sensors = useSensors(
@@ -67,23 +67,23 @@ const Overlay: FC = () => {
           flexDirection: 'row',
           gap: '40px'
         }}>
-          <Droppable id={1}>
+          <ToDoContainer id={1} >
             {todos && todos.items.map((todo) =>
               todo.col_id === 1 ? <Todo key={todo.card_id} item={todo} /> : null
             )}
-          </Droppable>
+          </ToDoContainer>
 
-          <Droppable id={2}>
+          <ToDoContainer id={2} >
             {todos && todos.items.map((todo) =>
               todo.col_id === 2 ? <Todo key={todo.card_id} item={todo} /> : null
             )}
-          </Droppable>
+          </ToDoContainer>
 
-          <Droppable id={3}>
+          <ToDoContainer id={3} >
             {todos && todos.items.map((todo) =>
               todo.col_id === 3 ? <Todo key={todo.card_id} item={todo} /> : null
             )}
-          </Droppable>
+          </ToDoContainer>
 
           <DragOverlay >
             {activeItem ? (<Todo key={activeItem.card_id} item={activeItem} />) : null}

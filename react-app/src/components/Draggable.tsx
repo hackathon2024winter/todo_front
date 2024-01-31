@@ -1,24 +1,16 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { useDraggable } from '@dnd-kit/core';
+import { DraggableItem } from '../utilities/types';
 
-interface PropsType {
-  id: number;
-  children: ReactNode
-}
 
-const Draggable: FC<PropsType> = (props) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-  } = useDraggable({
-    id: props.id,
-  });
+const Draggable: FC<DraggableItem> = (props) => {
+  const { attributes, listeners, setNodeRef, } = useDraggable({ id: props.id });
 
   return (
     <div ref={setNodeRef}
       {...listeners}
-      {...attributes}>
+      {...attributes}
+    >
       {props.children}
     </div>
   );

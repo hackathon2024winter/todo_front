@@ -6,7 +6,7 @@ const Todo: FC<{ item: ToDoItem }> = ({ item }) => {
 
   return (<>
 
-    <Draggable key={item.card_id} id={Number(item.card_id)} children={
+    <Draggable key={item.card_id} id={Number(item.card_id)}>
       <div className="mb-2">
         <div
           className="w-fit h-fit p-4 m-2 border-2 rounded-lg border-green-900 bg-green-500 select-none"
@@ -19,8 +19,7 @@ const Todo: FC<{ item: ToDoItem }> = ({ item }) => {
           </button>
         </div>
       </div>
-    } />
-
+    </Draggable>
   </>)
 }
 
