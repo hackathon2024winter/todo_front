@@ -2,7 +2,7 @@ import { DndContext, DragOverlay, DragStartEvent, DragEndEvent, MouseSensor, Uni
 import { FC, useEffect, useState } from "react";
 import { ToDoList } from "../utilities/types";
 import { dummyFetch } from "../utilities/dummy_fetch";
-import Todo from "./Todo"
+import Todo from "./ToDo"
 import ToDoContainer from "./ToDoCotainer";
 
 const Overlay: FC = () => {

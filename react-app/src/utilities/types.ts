@@ -39,3 +39,9 @@ export interface ToDoItem {
 export interface ToDoList {
   items: ToDoItem[]; // ToDoItemの配列
 }
+
+//Modalで編集するTodo型
+export interface EditToDoItem {
+  item: ToDoItem;
+  closeModal: () => void;
+}
