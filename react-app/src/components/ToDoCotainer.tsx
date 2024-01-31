@@ -12,7 +12,7 @@ const ToDoContainer: FC<ToDoContainerItem> = (props) => {
       onIsOverChange={setIsOver} // setIsOverとonIsOverChangeを一致させると、引数を伝搬させられる。
       className={
         classNames(
-          "p-0.5 w-52 h-72 gap-4 border-black border-solid border flex flex-col overflow-x-auto ",
+          "p-0.5 w-52 h-72 gap-1 border-black border-solid border flex flex-col overflow-x-auto ",
           { 'bg-green-300': isOver, 'bg-orange-200': !isOver })
       }
     >
