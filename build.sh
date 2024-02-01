@@ -18,6 +18,7 @@ else
   npx tailwindcss init -p
   sed -i "s/content: \[\]/content: \[\".\/src\/\*\*\/\*.{js,jsx,ts,tsx}\"\]/" tailwind.config.js
   cp ../index.css ./src/index.css
+  cp ../tailwind.config.js ./tailwind.config.js
 fi
 
 # cd ./react

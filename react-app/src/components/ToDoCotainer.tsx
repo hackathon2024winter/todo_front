@@ -8,16 +8,16 @@ const ToDoContainer: FC<ToDoContainerItem> = (props) => {
 
   return (
     <Droppable
-      id={props.id}
+      id={props.col_id}
       onIsOverChange={setIsOver} // setIsOverとonIsOverChangeを一致させると、引数を伝搬させられる。
       className={
         classNames(
-          "p-0.5 w-52 h-72 gap-1 border-black border-solid border flex flex-col overflow-x-auto ",
+          "p-0.5 w-52 h-72 gap-1 border-orange-400 border-2 rounded-lg flex flex-col overflow-x-auto ",
           { 'bg-green-300': isOver, 'bg-orange-200': !isOver })
       }
     >
       <span className="font-bold">
-        ドロップエリア
+        {props.col_name}
       </span>
 
       {props.children}

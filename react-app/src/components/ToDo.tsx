@@ -18,7 +18,6 @@ const Todo: FC<{ item: ToDoItem }> = ({ item }) => {
     setModalOpen(false);
   };
 
-
   return (
     <>
       <Draggable key={item.card_id} id={Number(item.card_id)}>
@@ -33,6 +32,6 @@ const Todo: FC<{ item: ToDoItem }> = ({ item }) => {
       {isModalOpen && <EditToDoModal item={item} closeModal={closeModal} />}
     </>
   )
-}
+};
 
 export default Todo;

@@ -19,8 +19,13 @@ export interface DroppableItem {
 }
 
 export interface ToDoContainerItem {
-  id: number;
-  children: ReactNode;
+  col_id: number;
+  col_name: string;
+  children?: ReactNode;
+}
+
+export interface ToDoContainerList {
+  items: ToDoContainerItem[];
 }
 
 // Todoの型を定義
@@ -44,4 +49,9 @@ export interface ToDoList {
 export interface EditToDoItem {
   item: ToDoItem;
   closeModal: () => void;
+}
+
+export interface AddContainerItem {
+  addContainer: (item: ToDoContainerItem) => void;
+  closeAddContainer: () => void;
 }
