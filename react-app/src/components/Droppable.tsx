@@ -14,8 +14,7 @@ const Droppable: FC<DroppableItem> = (props) => {
   return (
     <div
       ref={setNodeRef}
-      className={classNames(props.className, { 'bg-green-300': isOver, 'bg-orange-200': !isOver }
-      )}
+      className={classNames(props.className)}
     >
       {props.children}
     </div>
