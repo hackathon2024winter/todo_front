@@ -1,0 +1,21 @@
+name: Trigger Parent Update
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Trigger Repository Dispatch Event in Parent Repository
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PARENT_REPO_TOKEN }}
+          repository: 'hackathon2024winter/narra-belle'
+          event-type: 'submodule-updated'
