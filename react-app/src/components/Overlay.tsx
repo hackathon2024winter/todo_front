@@ -37,7 +37,7 @@ const Overlay: FC = () => {
       const nextColId = prev.items.length > 0
         ? Math.max(...prev.items.map(item => item.col_id)) + 1
         : 1;  // items が空の場合は 1 を使う
-
+    
       // 新しい col_id を設定する
       const updatedNewContainer = { ...newContainer, col_id: nextColId };
 

@@ -9,6 +9,8 @@ import Post from './components/Post'
 import PostIndex from './components/PostIndex';
 import { loadPosts } from './utilities/load_posts'
 import { loadPost } from './utilities/load_post'
+import Login from './components/Login'
+import Board from './components/Board'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +22,8 @@ const router = createBrowserRouter(
         <Route index element={<PostIndex />} loader={loadPosts} />
         <Route path=":postId" element={<Post />} loader={loadPost} errorElement={<ErrorPage />} />
       </Route>
+      <Route path="login" element={<Login />} />
+      <Route path='board' element={<Board />} />
     </Route >
   )
 );
