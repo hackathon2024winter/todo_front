@@ -55,3 +55,28 @@ export interface AddContainerItem {
   addContainer: (item: ToDoContainerItem) => void;
   closeAddContainer: () => void;
 }
+
+export type LoginForm = {
+  email: string;
+  password: string;
+}
+
+export type CategoryType ={
+  col_id: string,
+  col_name : string,
+  col_pos : number,
+}
+
+export type CategoryFormType = {
+  inputData: string,
+}
+
+export type CardFormType = {
+  inputData: string,
+}
+
+export type CardType = {
+  card_id: string,
+  card_name: string,
+  col_id: string | number,
+}
