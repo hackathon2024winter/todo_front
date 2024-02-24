@@ -16,7 +16,8 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import { dummyFetch } from "../utilities/ddummy_fetch";
+import { dummyFetchCard, dummyFetchCategory } from "../utilities/dummy_fetch";
+import { BaseURL } from "../utilities/base_url";
 
 const Board: FC = () => {
   const [cards, setCards] = useState<CardType[]>([]);
@@ -28,15 +29,22 @@ const Board: FC = () => {
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await dummyFetch();
-      const items = response.items;
+    const fetchCategory = async () => {
+      // const res = await fetch(`${BaseURL()}/getcategories`, {
+      //   method: "GET",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      // const resData = await res.json(); // レスポンスのJSONを解析
+      // console.log(resData);
 
+      const response = await dummyFetchCategory();
+      const items = response.items;
       const categoryMap: { [key: string]: CategoryType } = {};
-      const cardMap: { [key: string]: CardType } = {};
 
       items.forEach((item) => {
-        // カテゴリーとカードのマップを更新
+        // カテゴリーMapの重複を除く
         if (!categoryMap[item.col_id]) {
           categoryMap[item.col_id] = {
             col_pos: item.col_pos,
@@ -44,6 +52,31 @@ const Board: FC = () => {
             col_name: item.col_name,
           };
         }
+      });
+
+      // マップからソートされた配列を作成し、状態を更新
+      const categories = Object.values(categoryMap).sort(
+        (a, b) => a.col_pos - b.col_pos
+      );
+      setCategorys(categories);
+    };
+
+    const fetchCard = async () => {
+      const res = await fetch(`${BaseURL()}/getcards`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json(); // レスポンスのJSONを解析
+      console.log(resData);
+
+      const response = await dummyFetchCard();
+      const items = response.items;
+      const cardMap: { [key: string]: CardType } = {};
+
+      items.forEach((item) => {
+        // カードのMapの重複を除いて更新
         if (!cardMap[item.card_id]) {
           cardMap[item.card_id] = {
             card_pos: item.card_pos,
@@ -59,17 +92,14 @@ const Board: FC = () => {
       });
 
       // マップからソートされた配列を作成し、状態を更新
-      const categories = Object.values(categoryMap).sort(
-        (a, b) => a.col_pos - b.col_pos
-      );
       const cards = Object.values(cardMap).sort(
         (a, b) => a.card_pos - b.card_pos
       );
-      setCategorys(categories);
       setCards(cards);
     };
 
-    fetchData();
+    fetchCategory();
+    fetchCard();
   }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
 
   const categorysId = useMemo(
