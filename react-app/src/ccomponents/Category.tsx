@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 
 type Props = {
   category: CategoryType;
-  deleteCategory: (col_id: string | number) => void;
+  deleteCategory: (col_id: string) => void;
   cards: CardType[];
   createCard: (card: CardType) => void;
   deleteCard: (card_id: string) => void;

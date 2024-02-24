@@ -244,7 +244,7 @@ const Board: FC = () => {
           (card) => card.card_id == activeCardId
         );
 
-        cards[activeCardIndex].col_id = overCardId;
+        cards[activeCardIndex].col_id = overCardId.toString();
 
         return arrayMove(cards, activeCardIndex, activeCardIndex);
       });

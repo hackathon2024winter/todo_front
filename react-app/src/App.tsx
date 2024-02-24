@@ -14,6 +14,7 @@ import Post from "./components/Post";
 import PostIndex from "./components/PostIndex";
 import { loadPosts } from "./utilities/load_posts";
 import { loadPost } from "./utilities/load_post";
+import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Board from "./ccomponents/Board";
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
           errorElement={<ErrorPage />}
         />
       </Route>
+      <Route path="signup" element={<Signup />} />
       <Route path="login" element={<Login />} />
       <Route path="board" element={<Board />} />
     </Route>
