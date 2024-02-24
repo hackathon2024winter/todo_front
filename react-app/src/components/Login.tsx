@@ -16,7 +16,7 @@ const Login: FC = () => {
     setMessage(""); // 送信前にメッセージをクリア
 
     try {
-      const response = await fetch("http://localhost:8080/login", {
+      const response = await fetch("/fastapi/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,11 +28,9 @@ const Login: FC = () => {
       });
       const responseData = await response.json(); // レスポンスのJSONを解析
       if (response.ok) {
-        console.log(responseData);
-        // setMessage("ログインに成功しました。"); // 成功メッセージを設定
+        setMessage("ログインに成功しました。"); // 成功メッセージを設定
       } else {
-        console.log(responseData);
-        // setMessage(responseData.detail || "ログインに失敗しました。"); // 失敗メッセージを設定
+        setMessage(responseData.detail || "ログインに失敗しました。"); // 失敗メッセージを設定
       }
     } catch (error) {
       console.log(error);
@@ -82,6 +80,7 @@ const Login: FC = () => {
           {isSubmitting ? "送信中..." : "送信"}
         </button>
       </form>
+      {message && <div>{message}</div>}
     </>
   );
 };

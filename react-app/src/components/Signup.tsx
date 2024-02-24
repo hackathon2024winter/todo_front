@@ -20,7 +20,7 @@ const Signup: FC = () => {
     setMessage(""); // 送信前にメッセージをクリア
 
     try {
-      const response = await fetch("http://localhost:8080/signup", {
+      const response = await fetch("/fastapi/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
