@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { LoginForm } from "../utilities/types";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { BaseURL } from "../utilities/base_url";
 
 const Login: FC = () => {
   const {
@@ -16,7 +17,7 @@ const Login: FC = () => {
     setMessage(""); // 送信前にメッセージをクリア
 
     try {
-      const response = await fetch("/fastapi/login", {
+      const response = await fetch(`${BaseURL()}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

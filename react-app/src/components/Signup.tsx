@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { SignupForm } from "../utilities/ttyeps";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { BaseURL } from "../utilities/base_url";
 
 const Signup: FC = () => {
   const {
@@ -20,7 +21,7 @@ const Signup: FC = () => {
     setMessage(""); // 送信前にメッセージをクリア
 
     try {
-      const response = await fetch("/fastapi/signup", {
+      const response = await fetch(`${BaseURL()}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
