@@ -113,6 +113,18 @@ const Board: FC = () => {
     [categorys]
   );
 
+  useEffect(() => {
+    for (let i = 0; i < categorys.length; i++) {
+      categorys[i].col_pos = i;
+    }
+  }, [categorys])
+
+  useEffect(() => {
+    for (let i = 0; i < cards.length; i++) {
+      cards[i].card_pos = i;
+    }
+  }, [cards])
+
   const createCard = (card: CardType) => {
     const cardToAdd: CardType = {
       card_pos: cards.length,
@@ -123,7 +135,6 @@ const Board: FC = () => {
       due_date: card.due_date,
       color: card.color,
       description: card.description,
-
     };
 
     setCards([...cards, cardToAdd]);
