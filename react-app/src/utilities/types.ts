@@ -79,4 +79,5 @@ export type CardType = {
   card_id: string,
   card_name: string,
   col_id: string | number,
+  card_pos: number,
 }
