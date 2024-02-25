@@ -11,8 +11,9 @@ export interface CardType {
 
 export interface CategoryType {
     col_pos: number;
-    col_id: string,
-    col_name: string,
+    col_id: string;
+    col_name: string;
+    description: string;
 }
 
 export type SignupForm = {

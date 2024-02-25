@@ -30,14 +30,14 @@ const Board: FC = () => {
 
   useEffect(() => {
     const fetchCategory = async () => {
-      // const res = await fetch(`${BaseURL()}/getcategories`, {
-      //   method: "GET",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-      // const resData = await res.json(); // レスポンスのJSONを解析
-      // console.log(resData);
+      const res = await fetch(`${BaseURL()}/getcategories`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const resData = await res.json(); // レスポンスのJSONを解析
+      console.log(resData);
 
       const response = await dummyFetchCategory();
       const items = response.items;
@@ -50,6 +50,7 @@ const Board: FC = () => {
             col_pos: item.col_pos,
             col_id: item.col_id,
             col_name: item.col_name,
+            description: item.description,
           };
         }
       });
@@ -62,14 +63,14 @@ const Board: FC = () => {
     };
 
     const fetchCard = async () => {
-      const res = await fetch(`${BaseURL()}/getcards`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const resData = await res.json(); // レスポンスのJSONを解析
-      console.log(resData);
+      // const res = await fetch(`${BaseURL()}/getcards`, {
+      //   method: "GET",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      // const resData = await res.json(); // レスポンスのJSONを解析
+      //
 
       const response = await dummyFetchCard();
       const items = response.items;
@@ -134,6 +135,7 @@ const Board: FC = () => {
       col_id: categoryId,
       col_name: col_name,
       col_pos: categorys.length * 100,
+      description: "string",
     };
 
     setCategorys([...categorys, categoryToAdd]);
