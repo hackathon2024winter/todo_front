@@ -1,4 +1,4 @@
-import { FC, useMemo, useState, } from "react";
+import { FC, useEffect, useMemo, useState, } from "react";
 import { createPortal } from "react-dom";
 import { CategoryType, CategoryFormType, CardType } from "../utilities/types";
 import Category from "./Category";
@@ -17,7 +17,20 @@ const Board: FC = () => {
 
   const categorysId = useMemo(() => categorys.map((category) => category.col_id), [categorys])
 
-  
+  useEffect(() => {
+    for (let i = 0; i < categorys.length; i++) {
+      categorys[i].col_pos = i;
+    }
+    console.log(categorys)
+  }, [categorys])
+
+  useEffect(() => {
+    for (let i = 0; i < cards.length; i++) {
+      cards[i].card_pos = i;
+    }
+    console.log(cards)
+  },[cards])
+
   const createCard = (card_name: string, col_id: string) => {
     const  cardId = uuid();
 
@@ -25,6 +38,7 @@ const Board: FC = () => {
       card_id: cardId,
       card_name: card_name,
       col_id: col_id,
+      card_pos: cards.length 
     }
 
     setCards([...cards, cardToAdd])
@@ -42,7 +56,7 @@ const Board: FC = () => {
     const categoryToAdd: CategoryType = {
       col_id: categoryId,
       col_name: col_name,
-      col_pos: categorys.length * 100
+      col_pos: categorys.length 
     }
 
     setCategorys([...categorys, categoryToAdd])
@@ -110,34 +124,11 @@ const Board: FC = () => {
       (category) => category.col_id === overCategoryId
     )
 
-    // if (overCategoryIndex === 0) return;
-    // if (overCategoryIndex === categorys.length -1) return;
-
-    // const activeCategory = categorys[activeCategoryIndex];
-    
-    // const beforeOverCategoryIndex = overCategoryIndex - 1;
-
-    // const afterOverCategoryIndex = overCategoryIndex + 1;
-
-    // const overCategoryPosition = categorys[overCategoryIndex].col_pos
-
-    // const beforeOverCategoryPosition = categorys[beforeOverCategoryIndex].col_pos
-
-    // const afterOverCategoryPosition = categorys[afterOverCategoryIndex].col_pos
-    // 上から下への移動の場合(active > over) overのインデックスのposとafterのインデックスのposの比較を行う
-    // 下から上への移動の場合（active < over) oveｒのインデックスのposとbeforeのインデックスのposの比較を行う
     setCategorys((categorys) => {
-
-      // console.log(categorys)
-
-      // if (activeCategoryIndex > overCategoryIndex) {
-      //   activeCategory.col_pos = (overCategoryPosition + beforeOverCategoryPosition) / 2
-      // } else if (activeCategoryIndex < overCategoryIndex) {
-      //   activeCategory.col_pos = (overCategoryPosition + afterOverCategoryPosition) / 2
-      // }
-
       return arrayMove(categorys, activeCategoryIndex, overCategoryIndex)
     })
+
+    console.log(categorys)
   }
 
   const onDragOver = (event: DragOverEvent) => {
@@ -153,19 +144,19 @@ const Board: FC = () => {
     const isActiveCard = active.data.current?.type === 'CardType'
     const isOverCard = over.data.current?.type === 'CardType'
 
-
     if (activeCardId === overCardId) return;
     if (!isActiveCard) return;
 
     if (isActiveCard && isOverCard) {
+      const activeCardIndex = cards.findIndex(
+        (card) => card.card_id === activeCardId
+      );
+  
+      const overCardIndex = cards.findIndex(
+        (card) => card.card_id === overCardId
+      )
+
       setCards((cards) => {
-        const activeCardIndex = cards.findIndex(
-          (card) => card.card_id === activeCardId
-        );
-    
-        const overCardIndex = cards.findIndex(
-          (card) => card.card_id === overCardId
-        )
 
         cards[activeCardIndex].col_id = cards[overCardIndex].col_id
 
@@ -187,6 +178,7 @@ const Board: FC = () => {
       })
     }
 
+    console.log(cards)
   } 
 
 
