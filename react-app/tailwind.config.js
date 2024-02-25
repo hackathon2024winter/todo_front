@@ -4,11 +4,15 @@ export default {
   theme: {
     extend: {
       boxShadow: {
-        'custom': '0 4px 6px -1px rgba(0, 0, 0, 0.5)', // 半透明の真っ黒な影
+        custom: "0 4px 6px -1px rgba(0, 0, 0, 0.5)", // 半透明の真っ黒な影
+      },
+      colors: {
+        PoulOrange: "#E2B49A",
+        PoulYellow: "#E9C77B",
+        PoulBlue: "#99ABB9",
+        PoulGray: "#F5F5F5",
       },
     },
   },
   plugins: [],
-
-}
-
+};
