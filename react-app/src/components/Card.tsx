@@ -3,15 +3,15 @@ import { CardType } from "../utilities/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities"
 
-type Props ={
+type Props = {
     card: CardType,
     deleteCard: (card_id: string) => void;
 }
 
 const Card: FC<Props> = (props) => {
-    const {card, deleteCard, } = props;
+    const { card, deleteCard, } = props;
 
-    const {setNodeRef, attributes, listeners, transform, transition} = useSortable({
+    const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
         id: card.card_id,
         data: {
             type: "CardType",
@@ -19,7 +19,7 @@ const Card: FC<Props> = (props) => {
         }
     });
 
-    const style ={
+    const style = {
         transition,
         transform: CSS.Transform.toString(transform),
     }
