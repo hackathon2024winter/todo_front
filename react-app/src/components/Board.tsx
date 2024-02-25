@@ -21,14 +21,12 @@ const Board: FC = () => {
     for (let i = 0; i < categorys.length; i++) {
       categorys[i].col_pos = i;
     }
-    console.log(categorys)
   }, [categorys])
 
   useEffect(() => {
     for (let i = 0; i < cards.length; i++) {
       cards[i].card_pos = i;
     }
-    console.log(cards)
   },[cards])
 
   const createCard = (card_name: string, col_id: string) => {
@@ -127,8 +125,6 @@ const Board: FC = () => {
     setCategorys((categorys) => {
       return arrayMove(categorys, activeCategoryIndex, overCategoryIndex)
     })
-
-    console.log(categorys)
   }
 
   const onDragOver = (event: DragOverEvent) => {
@@ -177,8 +173,6 @@ const Board: FC = () => {
         return arrayMove(cards, activeCardIndex, activeCardIndex)
       })
     }
-
-    console.log(cards)
   } 
 
 
