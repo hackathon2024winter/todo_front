@@ -28,85 +28,97 @@ const Board: FC = () => {
     null
   );
 
-  useEffect(() => {
-    const fetchCategory = async () => {
-      const res = await fetch(`${BaseURL()}/getcategories`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const resData = await res.json(); // レスポンスのJSONを解析
-      console.log(resData);
+  // useEffect(() => {
+  //   const fetchCategory = async () => {
+  //     const res = await fetch(`${BaseURL()}/getcategories`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     const resData = await res.json(); // レスポンスのJSONを解析
+  //     console.log(resData);
 
-      const response = await dummyFetchCategory();
-      const items = response.items;
-      const categoryMap: { [key: string]: CategoryType } = {};
+  //     const response = await dummyFetchCategory();
+  //     const items = response.items;
+  //     const categoryMap: { [key: string]: CategoryType } = {};
 
-      items.forEach((item) => {
-        // カテゴリーMapの重複を除く
-        if (!categoryMap[item.col_id]) {
-          categoryMap[item.col_id] = {
-            col_pos: item.col_pos,
-            col_id: item.col_id,
-            col_name: item.col_name,
-            description: item.description,
-          };
-        }
-      });
+  //     items.forEach((item) => {
+  //       // カテゴリーMapの重複を除く
+  //       if (!categoryMap[item.col_id]) {
+  //         categoryMap[item.col_id] = {
+  //           col_pos: item.col_pos,
+  //           col_id: item.col_id,
+  //           col_name: item.col_name,
+  //           description: item.description,
+  //         };
+  //       }
+  //     });
 
-      // マップからソートされた配列を作成し、状態を更新
-      const categories = Object.values(categoryMap).sort(
-        (a, b) => a.col_pos - b.col_pos
-      );
-      setCategorys(categories);
-    };
+  //     // マップからソートされた配列を作成し、状態を更新
+  //     const categories = Object.values(categoryMap).sort(
+  //       (a, b) => a.col_pos - b.col_pos
+  //     );
+  //     setCategorys(categories);
+  //   };
 
-    const fetchCard = async () => {
-      // const res = await fetch(`${BaseURL()}/getcards`, {
-      //   method: "GET",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-      // const resData = await res.json(); // レスポンスのJSONを解析
-      //
+  //   const fetchCard = async () => {
+  //     // const res = await fetch(`${BaseURL()}/getcards`, {
+  //     //   method: "GET",
+  //     //   headers: {
+  //     //     "Content-Type": "application/json",
+  //     //   },
+  //     // });
+  //     // const resData = await res.json(); // レスポンスのJSONを解析
+  //     //
 
-      const response = await dummyFetchCard();
-      const items = response.items;
-      const cardMap: { [key: string]: CardType } = {};
+  //     const response = await dummyFetchCard();
+  //     const items = response.items;
+  //     const cardMap: { [key: string]: CardType } = {};
 
-      items.forEach((item) => {
-        // カードのMapの重複を除いて更新
-        if (!cardMap[item.card_id]) {
-          cardMap[item.card_id] = {
-            card_pos: item.card_pos,
-            card_id: item.card_id,
-            col_id: item.col_id,
-            card_name: item.card_name,
-            input_date: item.input_date,
-            due_date: item.due_date,
-            color: item.color,
-            description: item.description,
-          };
-        }
-      });
+  //     items.forEach((item) => {
+  //       // カードのMapの重複を除いて更新
+  //       if (!cardMap[item.card_id]) {
+  //         cardMap[item.card_id] = {
+  //           card_pos: item.card_pos,
+  //           card_id: item.card_id,
+  //           col_id: item.col_id,
+  //           card_name: item.card_name,
+  //           input_date: item.input_date,
+  //           due_date: item.due_date,
+  //           color: item.color,
+  //           description: item.description,
+  //         };
+  //       }
+  //     });
 
-      // マップからソートされた配列を作成し、状態を更新
-      const cards = Object.values(cardMap).sort(
-        (a, b) => a.card_pos - b.card_pos
-      );
-      setCards(cards);
-    };
+  //     // マップからソートされた配列を作成し、状態を更新
+  //     const cards = Object.values(cardMap).sort(
+  //       (a, b) => a.card_pos - b.card_pos
+  //     );
+  //     setCards(cards);
+  //   };
 
-    fetchCategory();
-    fetchCard();
-  }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
+  //   fetchCategory();
+  //   fetchCard();
+  // }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
 
   const categorysId = useMemo(
     () => categorys.map((category) => category.col_id),
     [categorys]
   );
+
+  useEffect(() => {
+    for (let i = 0; i < categorys.length; i++) {
+      categorys[i].col_pos = i;
+    }
+  }, [categorys])
+
+  useEffect(() => {
+    for (let i = 0; i < cards.length; i++) {
+      cards[i].card_pos = i;
+    }
+  },[cards])
 
   const createCard = (card: CardType) => {
     const cardToAdd: CardType = {
