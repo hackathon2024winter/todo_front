@@ -1,73 +1,123 @@
-import { ComponentProps, FC, ReactNode, useCallback } from 'react';
-import {
-  DndContext,
-  UniqueIdentifier,
-  useSensor,
-  useSensors,
-  PointerSensor,
-  KeyboardSensor,
-  DragStartEvent,
-  DragEndEvent,
-  closestCenter
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  rectSortingStrategy,
-  useSortable
-} from '@dnd-kit/sortable';
+import { FC, useCallback, useEffect, useState } from "react";
+import { DragStartEvent, DragEndEvent, DragOverlay } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { DraggableItem, DraggableHandle, DraggableList } from "./DraggableComponents";
 
-// idを含むインターフェイス
-export interface HasId {
-  id: UniqueIdentifier;
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+const ProductItem: FC<{ product: Product; className?: string }> = ({
+  product,
+  className,
+}) => {
+  return (
+    <DraggableItem id={product.id}>
+      <div className={className}>
+        <DraggableHandle id={product.id} />
+        <p>{product.name}</p>
+        <p>¥ {product.price}</p>
+      </div>
+    </DraggableItem>
+  );
 };
 
-// ドラッグ&ドロップ可能なリストアイテム
-export const MyDraggableList: FC = <T extends HasId>({
-  items,
-  onDragStart,
-  onDragEnd,
-  children
-}: {
-  items: T[];
-  onDragStart: ComponentProps<typeof DndContext>['onDragStart'];
-  onDragEnd: ComponentProps<typeof DndContext>['onDragEnd'];
-  children: ReactNode;
-}) => {
-  // ドラッグ&ドロップする時に許可する入力
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+const Board: FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [draggedProduct, setDraggedProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    // ここで商品データを初期化
+    // 実際のアプリではAPIからデータをフェッチすることが多いですが、例示のために静的なデータを使用
+    const initialProducts: Product[] = [
+      // 9つの商品データを初期化
+      { id: "1", name: "Product 1", price: 100 },
+      { id: "2", name: "Product 2", price: 150 },
+      { id: "3", name: "Product 3", price: 200 },
+      { id: "4", name: "Product 4", price: 250 },
+      { id: "5", name: "Product 5", price: 300 },
+      { id: "6", name: "Product 6", price: 350 },
+      { id: "7", name: "Product 7", price: 400 },
+      { id: "8", name: "Product 8", price: 450 },
+      { id: "9", name: "Product 9", price: 500 },
+    ];
+    setProducts(initialProducts);
+  }, []); // 空の依存配列を渡して、マウント時にのみ実行
+
+  const onDragStart = useCallback(
+    (e: DragStartEvent) => {
+      const { active } = e;
+      const activeProduct = products.find(
+        (product) => product.id === active.id
+      );
+      setDraggedProduct(activeProduct || null);
+    },
+    [products]
+  );
+
+  const onDragEnd = useCallback(
+    (e: DragEndEvent) => {
+      const { active, over } = e;
+      setDraggedProduct(null);
+
+      // `active`がドラッグされた要素、`over`がドロップされた要素
+      if (active.id !== over?.id) {
+        // 両方のidが存在し、異なる場合に配列の順序を変更
+        const oldIndex = products.findIndex(
+          (product) => product.id === active.id
+        );
+        const newIndex = products.findIndex(
+          (product) => product.id === over?.id
+        );
+
+        // `arrayMove`で新しい配列を作成
+        const newProducts = arrayMove(products, oldIndex, newIndex);
+
+        // ステートを更新
+        setProducts(newProducts);
+      }
+    },
+    [products]
   );
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={onDragStart}
-      onDragStart={onDragEnd}
+    <DraggableList<Product>
+      items={products}
+      layout="grid"
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
     >
-      <SortableContext
-        items={items}
-        strategy={rectSortingStrategy}
-      >
-        <ul>
-          {children}
-        </ul>
-      </SortableContext>
-    </DndContext>
+      <div className="flex flex-wrap -m-2">
+        {products.map((product) => (
+          <div className="flex w-1/3 p-2">
+            <ProductItem
+              key={product.id}
+              product={product}
+              className="bg-orange-200 border-2 border-orange-400 rounded-lg w-full"
+            />
+          </div>
+        ))}
+      </div>
+      <DragOverlay>
+        {draggedProduct ? (
+          <ProductItem
+            product={draggedProduct}
+            className="bg-orange-200 border-2 border-orange-400 rounded-lg w-full"
+          />
+        ) : null}
+      </DragOverlay>
+    </DraggableList>
   );
-}
+};
+
+export default Board;
 
 
-
-
-// import { FC, useEffect, useMemo, useState } from "react";
+// import { FC, useEffect, useMemo, useState, } from "react";
 // import { createPortal } from "react-dom";
-// import { CategoryFormType } from "../utilities/types";
-// import { CardType, CategoryType } from "../utilities/ttyeps";
+// import { CardType, CategoryType, CategoryFormType } from "../utilities/types";
 // import Category from "./Category";
 // import {
 //   DndContext,
@@ -180,9 +230,21 @@ export const MyDraggableList: FC = <T extends HasId>({
 //     [categorys]
 //   );
 
+//   useEffect(() => {
+//     for (let i = 0; i < categorys.length; i++) {
+//       categorys[i].col_pos = i;
+//     }
+//   }, [categorys])
+
+//   useEffect(() => {
+//     for (let i = 0; i < cards.length; i++) {
+//       cards[i].card_pos = i;
+//     }
+//   }, [cards])
+
 //   const createCard = (card: CardType) => {
 //     const cardToAdd: CardType = {
-//       card_pos: 0,
+//       card_pos: cards.length,
 //       card_id: uuid(),
 //       col_id: card.col_id,
 //       card_name: card.card_name,
@@ -206,7 +268,7 @@ export const MyDraggableList: FC = <T extends HasId>({
 //     const categoryToAdd: CategoryType = {
 //       col_id: categoryId,
 //       col_name: col_name,
-//       col_pos: categorys.length * 100,
+//       col_pos: categorys.length,
 //       description: "string",
 //     };
 
@@ -279,34 +341,10 @@ export const MyDraggableList: FC = <T extends HasId>({
 //       (category) => category.col_id === overCategoryId
 //     );
 
-//     // if (overCategoryIndex === 0) return;
-//     // if (overCategoryIndex === categorys.length -1) return;
-
-//     // const activeCategory = categorys[activeCategoryIndex];
-
-//     // const beforeOverCategoryIndex = overCategoryIndex - 1;
-
-//     // const afterOverCategoryIndex = overCategoryIndex + 1;
-
-//     // const overCategoryPosition = categorys[overCategoryIndex].col_pos
-
-//     // const beforeOverCategoryPosition = categorys[beforeOverCategoryIndex].col_pos
-
-//     // const afterOverCategoryPosition = categorys[afterOverCategoryIndex].col_pos
-//     // 上から下への移動の場合(active > over) overのインデックスのposとafterのインデックスのposの比較を行う
-//     // 下から上への移動の場合（active < over) oveｒのインデックスのposとbeforeのインデックスのposの比較を行う
 //     setCategorys((categorys) => {
-//       // console.log(categorys)
-
-//       // if (activeCategoryIndex > overCategoryIndex) {
-//       //   activeCategory.col_pos = (overCategoryPosition + beforeOverCategoryPosition) / 2
-//       // } else if (activeCategoryIndex < overCategoryIndex) {
-//       //   activeCategory.col_pos = (overCategoryPosition + afterOverCategoryPosition) / 2
-//       // }
-
-//       return arrayMove(categorys, activeCategoryIndex, overCategoryIndex);
-//     });
-//   };
+//       return arrayMove(categorys, activeCategoryIndex, overCategoryIndex)
+//     })
+//   }
 
 //   const onDragOver = (event: DragOverEvent) => {
 //     setActiveCard(null);
@@ -318,21 +356,22 @@ export const MyDraggableList: FC = <T extends HasId>({
 //     const activeCardId = active.id;
 //     const overCardId = over.id;
 
-//     const isActiveCard = active.data.current?.type === "CardType";
-//     const isOverCard = over.data.current?.type === "CardType";
+//     const isActiveCard = active.data.current?.type === 'CardType'
+//     const isOverCard = over.data.current?.type === 'CardType'
 
 //     if (activeCardId === overCardId) return;
 //     if (!isActiveCard) return;
 
 //     if (isActiveCard && isOverCard) {
-//       setCards((cards) => {
-//         const activeCardIndex = cards.findIndex(
-//           (card) => card.card_id === activeCardId
-//         );
+//       const activeCardIndex = cards.findIndex(
+//         (card) => card.card_id === activeCardId
+//       );
 
-//         const overCardIndex = cards.findIndex(
-//           (card) => card.card_id === overCardId
-//         );
+//       const overCardIndex = cards.findIndex(
+//         (card) => card.card_id === overCardId
+//       )
+
+//       setCards((cards) => {
 
 //         cards[activeCardIndex].col_id = cards[overCardIndex].col_id;
 
@@ -384,8 +423,8 @@ export const MyDraggableList: FC = <T extends HasId>({
 //             onClick={categoryModalOpen}
 //             className="
 //         h-[60px]
-//         border-2 rounded-lg p-2
-//         bg-orange-200 border-orange-400
+//         border-2 rounded-lg p-2 
+//         bg-orange-200 border-orange-400 
 //         cursor-pointer shadow-custom active:shadow-none active:scale-95 focus:outline-none
 //         select-none
 //         "
