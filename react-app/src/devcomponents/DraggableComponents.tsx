@@ -86,31 +86,26 @@ export const DraggableItem: FC<{ id: HasId['id']; children: ReactNode; }> =
             <li ref={setNodeRef}>
                 {children}
             </li>
-        )
-    }
+        );
+    };
 
-// DraggableItemをドラッグ&ドロップするためのハンドル
-// children全体にドラッグ&ドロップ機能を付与する。
-// export const DraggableHandle: FC<{ id: HasId['id']; children: ReactNode; }> =
-//   ({ id, children }) => {
-//     const { attributes, listeners } = useSortable({ id });
-
-//     return (
-//       <div {...attributes} {...listeners}>
-//         {children}
-//       </div>
-//     )
-//   }
 
 // DraggableItemをドラッグ&ドロップするためのハンドル
 // svgファイルのみにドラッグ&ドロップ機能を持たせる。
-export const DraggableHandle: FC<{ id: HasId['id']; }> =
-    ({ id }) => {
+export const DraggableHandle: FC<{ id: HasId['id']; children?: ReactNode; }> =
+    ({ id, children }) => {
         const { attributes, listeners } = useSortable({ id });
 
         return (
-            <div className="w-8 h-8" {...attributes} {...listeners}>
-                <img src="/drag-handle-dots-1-svgrepo-com.svg" alt="Description" />
+            <div className="flex justify-between">
+                <div {...attributes} {...listeners}>   {/*DraggableHandleの本体。マウスカーソルが変わる */}
+                    <div className="w-8 h-8" >
+                        <img src="/drag-handle-dots-1-svgrepo-com.svg" alt="Description" />
+                    </div>
+                </div>
+                <div className="mt-1 ml-1">
+                    {children}
+                </div>
             </div>
-        )
-    }
+        );
+    };

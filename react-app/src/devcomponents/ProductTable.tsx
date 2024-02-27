@@ -1,205 +1,119 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { DragStartEvent, DragEndEvent, DragOverlay } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import {
-  // DraggableItem,
-  // DraggableHandle,
-  DraggableList,
-} from "./DraggableComponents";
-import AddCategoryModal from "./AddCategoryModal";
-import { CardType, CategoryType } from "../utilities/ttypes";
-import Category from "./Category";
+import { DraggableItem, DraggableHandle, DraggableList } from "./DraggableComponents";
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+const ProductItem: FC<{ product: Product; className?: string }> = ({
+  product,
+  className,
+}) => {
+  return (
+    <DraggableItem id={product.id}>
+      <div className={className}>
+        <DraggableHandle id={product.id} />
+        <p>{product.name}</p>
+        <p>¥ {product.price}</p>
+      </div>
+    </DraggableItem>
+  );
+};
 
 const Board: FC = () => {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [cards, setCards] = useState<CardType[]>([]);
-  const [draggedCategory, setdraggedCategory] = useState<CategoryType | null>(
-    null
-  );
-
-  // カテゴリ追加の表示状態を管理するstate
-  const [isAddCategoryModal, setAddCategoryModal] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [draggedProduct, setDraggedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     // ここで商品データを初期化
     // 実際のアプリではAPIからデータをフェッチすることが多いですが、例示のために静的なデータを使用
-    const initialCategories: CategoryType[] = [
-      {
-        col_pos: 1,
-        id: "76cfdd6b-32d9-4938-9c03-32905e50f7ac",
-        col_name: "未着手",
-        description: "まだ手を付けていないもの",
-      },
-      {
-        col_pos: 2,
-        id: "734c5844-7cba-4c51-8d0c-9830d09bb562",
-        col_name: "進行中",
-        description: "現在進行中",
-      },
-      {
-        col_pos: 3,
-        id: "7414208f-560c-4641-8d08-f7ea576d4f6f",
-        col_name: "完了",
-        description: "完了しました",
-      },
-      {
-        col_pos: 4,
-        id: "bf7e0b03-ecd8-415a-8f6b-36ae8c4154ed",
-        col_name: "未分類",
-        description: "まだよくわからない",
-      },
+    const initialProducts: Product[] = [
+      // 9つの商品データを初期化
+      { id: "1", name: "Product 1", price: 100 },
+      { id: "2", name: "Product 2", price: 150 },
+      { id: "3", name: "Product 3", price: 200 },
+      { id: "4", name: "Product 4", price: 250 },
+      { id: "5", name: "Product 5", price: 300 },
+      { id: "6", name: "Product 6", price: 350 },
+      { id: "7", name: "Product 7", price: 400 },
+      { id: "8", name: "Product 8", price: 450 },
+      { id: "9", name: "Product 9", price: 500 },
     ];
-    setCategories(initialCategories);
-
-    const initialCards: CardType[] = [
-      {
-        "id": "5fa25678-4df3-458b-87a8-df45397daba3",
-        "card_pos": 1,
-        "col_id": "76cfdd6b-32d9-4938-9c03-32905e50f7ac",
-        "card_name": "朝ごはんを作る",
-        "input_date": "2024-01-30",
-        "due_date": "2024-01-31",
-        "color": "color1",
-        "description": "昨日のカレー"
-      },
-      {
-        "id": "b2c04f39-66d7-4eaf-af36-d52a23492e94",
-        "card_pos": 2,
-        "col_id": "734c5844-7cba-4c51-8d0c-9830d09bb562",
-        "card_name": "レポートを書く",
-        "input_date": "2024-01-30",
-        "due_date": "2024-02-05",
-        "color": "color2",
-        "description": "市場分析に関するレポート"
-      },
-      {
-        "id": "7e26623f-2903-4e60-b146-0075d38e7503",
-        "card_pos": 3,
-        "col_id": "76cfdd6b-32d9-4938-9c03-32905e50f7ac",
-        "card_name": "ジムに行く",
-        "input_date": "2024-01-30",
-        "due_date": "2024-01-31",
-        "color": "color3",
-        "description": "新しいトレーニングプランを試す"
-      },
-    ]
-    setCards(initialCards)
-
+    setProducts(initialProducts);
   }, []); // 空の依存配列を渡して、マウント時にのみ実行
 
   const onDragStart = useCallback(
     (e: DragStartEvent) => {
       const { active } = e;
-      const activeProduct = categories.find(
-        (category) => category.id === active.id
+      const activeProduct = products.find(
+        (product) => product.id === active.id
       );
-      setdraggedCategory(activeProduct || null);
+      setDraggedProduct(activeProduct || null);
     },
-    [categories]
+    [products]
   );
 
   const onDragEnd = useCallback(
     (e: DragEndEvent) => {
       const { active, over } = e;
-      setdraggedCategory(null);
+      setDraggedProduct(null);
 
       // `active`がドラッグされた要素、`over`がドロップされた要素
       if (active.id !== over?.id) {
         // 両方のidが存在し、異なる場合に配列の順序を変更
-        const oldIndex = categories.findIndex(
-          (category) => category.id === active.id
+        const oldIndex = products.findIndex(
+          (product) => product.id === active.id
         );
-        const newIndex = categories.findIndex(
-          (category) => category.id === over?.id
+        const newIndex = products.findIndex(
+          (product) => product.id === over?.id
         );
 
         // `arrayMove`で新しい配列を作成
-        const newCategories = arrayMove(categories, oldIndex, newIndex);
+        const newProducts = arrayMove(products, oldIndex, newIndex);
 
         // ステートを更新
-        setCategories(newCategories);
+        setProducts(newProducts);
       }
     },
-    [categories]
+    [products]
   );
 
-
-  const deleteCategory = (id: string | number) => {
-    const filteredCategorys = categories.filter((category) => category.id !== id);
-    setCategories(filteredCategorys);
-    // const newCards = cards.filter((card) => card.col_id !== id);
-    // setCards(newCards);
-  };
-
-  // カテゴリ追加を開く関数
-  const openAddCategory = () => {
-    setAddCategoryModal(true);
-  };
-
-  // カテゴリ追加を閉じる関数
-  const closeAddCategory = () => {
-    setAddCategoryModal(false);
-  };
-
   return (
-    <>
-      <div className=" m-auto flex flex-row gap-4">
-        <DraggableList<CategoryType>
-          items={categories}
-          layout="grid"
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-        >
-          <div className=" flex flex-row gap-4">
-            {categories.map((category) => (
-              <div key={category.id} className="">
-                <Category
-                  category={category}
-                  deleteCategory={deleteCategory}
-                  setCards={setCards}//状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
-                  cards={cards}
-                  className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
-                />
-              </div>
-            ))}
+    <DraggableList<Product>
+      items={products}
+      layout="grid"
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
+      <div className="flex flex-wrap -m-2">
+        {products.map((product) => (
+          <div className="flex w-1/3 p-2">
+            <ProductItem
+              key={product.id}
+              product={product}
+              className="bg-orange-200 border-2 border-orange-400 rounded-lg w-full"
+            />
           </div>
-          <DragOverlay>
-            {draggedCategory ? (
-              <Category
-                category={draggedCategory}
-                deleteCategory={deleteCategory}
-                setCards={setCards} //状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
-                cards={cards}
-                className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
-              />
-            ) : null}
-          </DragOverlay>
-        </DraggableList>
-
-        <button
-          onClick={openAddCategory}
-          className="
-         h-[60px]
-         border-2 rounded-lg p-2
-         bg-[#ECDED5] border-orange-400
-         cursor-pointer shadow-custom active:shadow-none active:scale-95 focus:outline-none
-         select-none
-         "
-        >
-          カテゴリの追加
-        </button>
+        ))}
       </div>
-      {isAddCategoryModal && (
-        <AddCategoryModal
-          closeAddCategory={closeAddCategory}
-          setCategories={setCategories}
-        />
-      )}
-    </>
+      <DragOverlay>
+        {draggedProduct ? (
+          <ProductItem
+            product={draggedProduct}
+            className="bg-orange-200 border-2 border-orange-400 rounded-lg w-full"
+          />
+        ) : null}
+      </DragOverlay>
+    </DraggableList>
   );
 };
 
 export default Board;
+
 
 // import { FC, useEffect, useMemo, useState, } from "react";
 // import { createPortal } from "react-dom";
@@ -509,8 +423,8 @@ export default Board;
 //             onClick={categoryModalOpen}
 //             className="
 //         h-[60px]
-//         border-2 rounded-lg p-2
-//         bg-orange-200 border-orange-400
+//         border-2 rounded-lg p-2 
+//         bg-orange-200 border-orange-400 
 //         cursor-pointer shadow-custom active:shadow-none active:scale-95 focus:outline-none
 //         select-none
 //         "
