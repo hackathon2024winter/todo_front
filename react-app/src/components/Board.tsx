@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState, } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { CardType, CategoryType, CategoryFormType } from "../utilities/types";
 import Category from "./Category";
@@ -38,7 +38,7 @@ const Board: FC = () => {
       const resData = await response.json();
       // 解析したJSONからitems配列を取得します
       const items = resData.data;
-
+      
       // `categoryMap` はオブジェクトであり、キーに基づいてユニークな値を保持します。
       // これは配列と異なり、JSONオブジェクトではキーがユニークであるため、
       // 新しい要素を追加する際に "append"（末尾に追加する操作）は不要です。
@@ -78,7 +78,7 @@ const Board: FC = () => {
       const resData = await response.json();
       // 解析したJSONからitems配列を取得します
       const items = resData.data;
-
+      
       const cardMap: { [key: string]: CardType } = {};
 
       items.forEach((item: CardType) => {
@@ -125,16 +125,16 @@ const Board: FC = () => {
     }
   }, [cards])
 
-  const createCard = (card: CardType) => {
+  const createCard = (card_name: string, col_id: string, card_description: string) => {
     const cardToAdd: CardType = {
       card_pos: cards.length,
       card_id: uuid(),
-      col_id: card.col_id,
-      card_name: card.card_name,
-      input_date: card.input_date,
-      due_date: card.due_date,
-      color: card.color,
-      description: card.description,
+      col_id: col_id,
+      card_name: card_name,
+      input_date: "string",
+      due_date: "string",
+      color: "string",
+      description: card_description,
     };
 
     setCards([...cards, cardToAdd]);
@@ -146,10 +146,8 @@ const Board: FC = () => {
   };
 
   const createCategory = (col_name: string) => {
-    const categoryId = uuid();
-
     const categoryToAdd: CategoryType = {
-      col_id: categoryId,
+      col_id: uuid(),
       col_name: col_name,
       col_pos: categorys.length,
       description: "string",
@@ -179,10 +177,14 @@ const Board: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    reset,
+    formState: { errors, },
   } = useForm<CategoryFormType>();
 
   const onsubmit = (data: CategoryFormType) => {
+    categoryModalClose()
+    reset()
+    
     const col_name = data.inputData;
     createCategory(col_name);
   };
@@ -225,9 +227,9 @@ const Board: FC = () => {
     );
 
     setCategorys((categorys) => {
-      return arrayMove(categorys, activeCategoryIndex, overCategoryIndex)
-    })
-  }
+      return arrayMove(categorys, activeCategoryIndex, overCategoryIndex);
+    });
+  };
 
   const onDragOver = (event: DragOverEvent) => {
     setActiveCard(null);
@@ -239,22 +241,21 @@ const Board: FC = () => {
     const activeCardId = active.id;
     const overCardId = over.id;
 
-    const isActiveCard = active.data.current?.type === 'CardType'
-    const isOverCard = over.data.current?.type === 'CardType'
+    const isActiveCard = active.data.current?.type === "CardType";
+    const isOverCard = over.data.current?.type === "CardType";
 
     if (activeCardId === overCardId) return;
     if (!isActiveCard) return;
 
     if (isActiveCard && isOverCard) {
-      const activeCardIndex = cards.findIndex(
-        (card) => card.card_id === activeCardId
-      );
-
-      const overCardIndex = cards.findIndex(
-        (card) => card.card_id === overCardId
-      )
-
       setCards((cards) => {
+        const activeCardIndex = cards.findIndex(
+          (card) => card.card_id === activeCardId
+        );
+
+        const overCardIndex = cards.findIndex(
+          (card) => card.card_id === overCardId
+        );
 
         cards[activeCardIndex].col_id = cards[overCardIndex].col_id;
 
@@ -320,10 +321,20 @@ const Board: FC = () => {
         <div>
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+              <div className="flex justify-between">
+                <div className="text-black">
+                  カテゴリの追加
+                </div>
+                <button
+                      onClick={categoryModalClose}
+                      className=""
+                    >
+                      ✖️
+                </button>
+              </div>
               <form onSubmit={handleSubmit(onsubmit)}>
                 <div>
-                  <label htmlFor="inputData">タイトル</label>
-                  <br />
+                  <label htmlFor="inputData" className="text-black">カテゴリ名</label>
                   <input
                     id="inputData"
                     type="text"
@@ -332,24 +343,15 @@ const Board: FC = () => {
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
                   />
-                  {errors.inputData && <div>{errors.inputData.message}</div>}
+                  {errors.inputData && <div className="text-black">{errors.inputData.message}</div>}
                 </div>
                 <button
                   type="submit"
                   className="w-20 px-4 py-2 bg-blue-500 text-white rounded"
-                  disabled={!isDirty || !isValid}
                 >
                   送信
                 </button>
               </form>
-              <div className="">
-                <button
-                  onClick={categoryModalClose}
-                  className="w-20 px-4 py-2 bg-blue-500 text-white rounded"
-                >
-                  閉じる
-                </button>
-              </div>
             </div>
           </div>
         </div>

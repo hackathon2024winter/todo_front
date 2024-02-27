@@ -9,7 +9,7 @@ type Props = {
   category: CategoryType;
   deleteCategory: (col_id: string) => void;
   cards: CardType[];
-  createCard: (card: CardType) => void;
+  createCard: (card_name: string, col_id: string, card_description: string) => void;
   deleteCard: (card_id: string) => void;
 };
 
@@ -46,22 +46,19 @@ const Category: FC<Props> = (props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    reset,
+    formState: { errors,},
   } = useForm<CardFormType>();
 
   const onsubmit = (data: CardFormType) => {
-    const card: CardType = {
-      card_pos: 0,
-      card_id: "string",
-      col_id: category.col_id,
-      card_name: data.inputData,
-      input_date: "string",
-      due_date: "string",
-      color: "string",
-      description: "string",
-    };
+    cardModalClose()
+    reset()
 
-    createCard(card);
+    const cardName = data.cardName
+    const columnId = category.col_id
+    const cardDescription = data.cardDescription
+
+    createCard(cardName, columnId, cardDescription);
   };
 
   return (
@@ -87,10 +84,7 @@ const Category: FC<Props> = (props) => {
         <div
           {...listeners}
           {...attributes}
-          className="
-                    text-[#183346]
-                    
-                "
+          className="text-[#183346]"
         >
           {category.col_name}
         </div>
@@ -118,36 +112,45 @@ const Category: FC<Props> = (props) => {
         <div>
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+              <div className="flex justify-between">
+                <div className="text-black">
+                  カードの追加
+                </div>
+                <button
+                      onClick={cardModalClose}
+                    >
+                      ✖️
+                </button>
+              </div>
               <form onSubmit={handleSubmit(onsubmit)}>
                 <div>
-                  <label htmlFor="inputData">タイトル</label>
-                  <br />
+                  <label htmlFor="cardName" className="text-black">カード名</label>
                   <input
-                    id="inputData"
+                    id="cardName"
                     type="text"
-                    {...register("inputData", {
+                    {...register("cardName", {
                       required: "タイトルは必須です",
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
                   />
-                  {errors.inputData && <div>{errors.inputData.message}</div>}
+                  {errors.cardName && <div className="text-black">{errors.cardName.message}</div>}
+                </div>
+                <div>
+                  <label htmlFor="cardDescription" className="text-black">カードの説明</label>
+                  <input
+                    id="cardDescription"
+                    type="text"
+                    {...register("cardDescription")}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
+                  />
                 </div>
                 <button
                   type="submit"
                   className="w-20 px-4 py-2 bg-blue-500 text-white rounded"
-                  disabled={!isDirty || !isValid}
                 >
                   送信
                 </button>
               </form>
-              <div className="">
-                <button
-                  onClick={cardModalClose}
-                  className="w-20 px-4 py-2 bg-blue-500 text-white rounded"
-                >
-                  閉じる
-                </button>
-              </div>
             </div>
           </div>
         </div>

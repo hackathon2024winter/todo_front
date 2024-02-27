@@ -1,3 +1,5 @@
+
+
 export interface CardType {
     card_pos: number;
     card_id: string;
@@ -29,9 +31,10 @@ export type SignupForm = {
 }
 
 export type CardFormType = {
-    inputData: string,
+  cardName: string,
+  cardDescription: string,
 }
 
 export type CategoryFormType = {
-    inputData: string,
+  inputData: string,
 }
