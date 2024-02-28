@@ -123,14 +123,6 @@ const Board: FC = () => {
     [categories]
   );
 
-
-  const deleteCategory = (id: string | number) => {
-    const filteredCategorys = categories.filter((category) => category.id !== id);
-    setCategories(filteredCategorys);
-    // const newCards = cards.filter((card) => card.col_id !== id);
-    // setCards(newCards);
-  };
-
   // カテゴリ追加を開く関数
   const openAddCategory = () => {
     setAddCategoryModal(true);
@@ -155,7 +147,7 @@ const Board: FC = () => {
               <div key={category.id} className="">
                 <Category
                   category={category}
-                  deleteCategory={deleteCategory}
+                  setCategories={setCategories}//状態categoriesとそのアクセッサーsetCategoriesは個別のプロパティで渡すべき。
                   setCards={setCards}//状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
                   cards={cards}
                   className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
@@ -163,17 +155,17 @@ const Board: FC = () => {
               </div>
             ))}
           </div>
-          <DragOverlay>
+          {/* <DragOverlay>
             {draggedCategory ? (
               <Category
                 category={draggedCategory}
-                deleteCategory={deleteCategory}
-                setCards={setCards} //状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
+                setCategories={setCategories}
+                setCards={setCards}
                 cards={cards}
                 className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
               />
             ) : null}
-          </DragOverlay>
+          </DragOverlay> */}
         </DraggableList>
 
         <button

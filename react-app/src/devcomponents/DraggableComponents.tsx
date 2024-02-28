@@ -92,15 +92,22 @@ export const DraggableItem: FC<{ id: HasId['id']; children: ReactNode; }> =
 
 // DraggableItemをドラッグ&ドロップするためのハンドル
 // svgファイルのみにドラッグ&ドロップ機能を持たせる。
-export const DraggableHandle: FC<{ id: HasId['id']; children?: ReactNode; }> =
-    ({ id, children }) => {
+
+interface DraggableHandleProps {
+    id: HasId['id'];
+    children?: ReactNode;
+    imgPath: string;
+}
+
+export const DraggableHandle: FC<DraggableHandleProps> =
+    ({ id, children, imgPath }) => {
         const { attributes, listeners } = useSortable({ id });
 
         return (
             <div className="flex justify-between">
                 <div {...attributes} {...listeners}>   {/*DraggableHandleの本体。マウスカーソルが変わる */}
                     <div className="w-8 h-8" >
-                        <img src="/drag-handle-dots-1-svgrepo-com.svg" alt="Description" />
+                        <img src={imgPath} alt="Description" />
                     </div>
                 </div>
                 <div className="mt-1 ml-1">
@@ -109,3 +116,5 @@ export const DraggableHandle: FC<{ id: HasId['id']; children?: ReactNode; }> =
             </div>
         );
     };
+
+
