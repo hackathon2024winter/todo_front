@@ -28,6 +28,7 @@ interface DraggableListProps<T extends HasId> {
     items: T[];
     onDragStart: ComponentProps<typeof DndContext>["onDragStart"];
     onDragEnd: ComponentProps<typeof DndContext>["onDragEnd"];
+    onDragMove: ComponentProps<typeof DndContext>["onDragMove"];
     layout: "horizontal" | "vertical" | "grid";
     children: ReactNode;
 }
@@ -38,6 +39,7 @@ export const DraggableList = <T extends HasId>({
     items,
     onDragStart,
     onDragEnd,
+    onDragMove,
     layout,
     children,
 }: DraggableListProps<T>) => {
@@ -68,6 +70,7 @@ export const DraggableList = <T extends HasId>({
             collisionDetection={closestCenter}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
+            onDragMove={onDragMove}
         >
             <SortableContext items={items} strategy={strategy}>
                 <ul>{children}</ul>

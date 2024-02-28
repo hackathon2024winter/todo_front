@@ -6,7 +6,7 @@ import {
     DraggableList,
 } from "./DraggableComponents";
 import AddCardModal from "./AddCardModal";
-import { DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
+import { DragEndEvent, DragMoveEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import Card from "./Card";
 
@@ -36,9 +36,7 @@ const Category: FC<CategoryProps> = ({
         (e: DragStartEvent) => {
             const { active } = e;
             const activeCard = cards.find((card) => card.id === active.id);
-            console.log(cards);
             setdraggedCard(activeCard || null);
-
         },
         [cards]
     );
@@ -65,6 +63,17 @@ const Category: FC<CategoryProps> = ({
         },
         [setCards]
     );
+
+    const onDragMove = useCallback(
+        (e: DragMoveEvent) => {
+            const { active, over } = e;
+            const activeCard = cards.find((card) => card.id === active.id);
+            console.log(`Move: ${activeCard?.id} Over: ${over?.id}`);
+            setdraggedCard(activeCard || null);
+        },
+        [cards]
+    );
+
 
     // カテゴリ追加を開く関数
     const openAddCard = () => {
@@ -110,6 +119,7 @@ const Category: FC<CategoryProps> = ({
                         layout="grid"
                         onDragStart={onDragStart}
                         onDragEnd={onDragEnd}
+                        onDragMove={onDragMove}
                     >
                         <div className=" gap-4">
                             {cards.map((card) =>
