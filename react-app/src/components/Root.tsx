@@ -1,9 +1,11 @@
 import { FC } from "react";
 import { Link, Outlet } from "react-router-dom";
+import MenuBar from "./MenuBar";
 
 const Root: FC = () => {
   return (
     <>
+      <MenuBar />
       <ul className="list-disc pl-5 ml-4">
         <li>
           <Link className="text-blue-600 visited:text-purple-600" to="/">
