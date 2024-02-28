@@ -38,7 +38,7 @@ const Board: FC = () => {
       const resData = await response.json();
       // 解析したJSONからitems配列を取得します
       const items = resData.data;
-      
+
       // `categoryMap` はオブジェクトであり、キーに基づいてユニークな値を保持します。
       // これは配列と異なり、JSONオブジェクトではキーがユニークであるため、
       // 新しい要素を追加する際に "append"（末尾に追加する操作）は不要です。
@@ -78,7 +78,7 @@ const Board: FC = () => {
       const resData = await response.json();
       // 解析したJSONからitems配列を取得します
       const items = resData.data;
-      
+
       const cardMap: { [key: string]: CardType } = {};
 
       items.forEach((item: CardType) => {
@@ -117,15 +117,19 @@ const Board: FC = () => {
     for (let i = 0; i < categorys.length; i++) {
       categorys[i].col_pos = i;
     }
-  }, [categorys])
+  }, [categorys]);
 
   useEffect(() => {
     for (let i = 0; i < cards.length; i++) {
       cards[i].card_pos = i;
     }
-  }, [cards])
+  }, [cards]);
 
-  const createCard = (card_name: string, col_id: string, card_description: string) => {
+  const createCard = (
+    card_name: string,
+    col_id: string,
+    card_description: string
+  ) => {
     const cardToAdd: CardType = {
       card_pos: cards.length,
       card_id: uuid(),
@@ -178,13 +182,13 @@ const Board: FC = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, },
+    formState: { errors },
   } = useForm<CategoryFormType>();
 
   const onsubmit = (data: CategoryFormType) => {
-    categoryModalClose()
-    reset()
-    
+    categoryModalClose();
+    reset();
+
     const col_name = data.inputData;
     createCategory(col_name);
   };
@@ -279,14 +283,14 @@ const Board: FC = () => {
   };
 
   return (
-    <div>
+    <div className="bg-PoulGray h-full">
       <DndContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
         sensors={sensors}
       >
-        <div className=" m-auto flex flex-row gap-4">
+        <div className=" m-auto flex flex-row gap-4 bg-PoulGray">
           <div className=" flex flex-row grap-4 gap-4">
             <SortableContext items={categorysId}>
               {categorys.map((category) => (
@@ -307,47 +311,76 @@ const Board: FC = () => {
             onClick={categoryModalOpen}
             className="
         h-[60px]
-        border-2 rounded-lg p-2 
-        bg-orange-200 border-orange-400 
-        cursor-pointer shadow-custom active:shadow-none active:scale-95 focus:outline-none
+         rounded-lg p-2 
+        bg-PoulOrange 
+        cursor-pointer active:scale-95 focus:outline-none
         select-none
+        hover:text-white hover:bg-opacity-50
         "
           >
-            カテゴリの追加
+            <div className="flex justify-center text-black-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 black-500"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              カテゴリの追加
+            </div>
           </button>
         </div>
       </DndContext>
       {isCategoryModal && (
         <div>
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-            <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="flex justify-between">
-                <div className="text-black">
+            <div className="relative top-20 mx-auto p-5 border w-1/5 shadow-lg rounded-md bg-white">
+              <div className="flex justify-between mb-3">
+                <div className="text-black text-lg text-center grow">
                   カテゴリの追加
                 </div>
-                <button
-                      onClick={categoryModalClose}
-                      className=""
-                    >
-                      ✖️
+                <button onClick={categoryModalClose} className="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
                 </button>
               </div>
               <form onSubmit={handleSubmit(onsubmit)}>
-                <div>
-                  <label htmlFor="inputData" className="text-black">カテゴリ名</label>
+                <div className="mb-3 text-center">
                   <input
                     id="inputData"
                     type="text"
+                    placeholder="カテゴリ名を入力"
                     {...register("inputData", {
-                      required: "タイトルは必須です",
+                      required: "カテゴリ名は必須です",
                     })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
                   />
-                  {errors.inputData && <div className="text-black">{errors.inputData.message}</div>}
+                  {errors.inputData && (
+                    <div className="text-black">{errors.inputData.message}</div>
+                  )}
                 </div>
                 <button
                   type="submit"
-                  className="w-20 px-4 py-2 bg-blue-500 text-white rounded"
+                  className="block ml-auto mr-auto m-2 rounded-lg bg-PoulBlue px-3 py-2 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-opacity-50 focus-visible:ring active:bg-gray-600 md:text-base"
                 >
                   送信
                 </button>
