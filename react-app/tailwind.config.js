@@ -7,6 +7,7 @@ export default {
         custom: "0 4px 6px -1px rgba(0, 0, 0, 0.5)", // 半透明の真っ黒な影
       },
       colors: {
+        PoulRed: "#E2B49A",
         PoulOrange: "#E2B49A",
         PoulYellow: "#E9C77B",
         PoulBlue: "#99ABB9",

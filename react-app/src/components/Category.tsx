@@ -1,15 +1,16 @@
 import { FC, useMemo, useState } from "react";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { CardType, CardFormType, CategoryType } from "../utilities/types";
+import { CardType, CardFormType, CategoryType, cardColorForm} from "../utilities/types";
 import Card from "./Card";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import Select, {StylesConfig} from "react-select";
 
 type Props = {
   category: CategoryType;
   deleteCategory: (col_id: string) => void;
   cards: CardType[];
-  createCard: (card_name: string, col_id: string, card_description: string) => void;
+  createCard: (card_name: string, col_id: string, card_description: string, due_date: string, card_color: string) => void;
   deleteCard: (card_id: string) => void;
 };
 
@@ -48,17 +49,48 @@ const Category: FC<Props> = (props) => {
     handleSubmit,
     reset,
     formState: { errors,},
+    control,
   } = useForm<CardFormType>();
+
+  const options: Array<cardColorForm> = [
+    {value: "red", label: "赤", primaryColor: "#E39C74", secondaryColor: "#FaDCD0"},
+    {value: "blue", label: "青", primaryColor: "#97BDD3", secondaryColor: "#D3ECF3"},
+    {value: "yellow", label: "黄", primaryColor: "#E2B856", secondaryColor: "#FAE9C2"}
+  ]
+
+  const colorStyles: StylesConfig<cardColorForm> ={
+    control: (styles) => ({...styles, 
+      backgroundColor: 'white',
+      borderRadius: '7px',
+      border: '1px solid gray',
+    }),
+    option: (style, {data, isFocused, isSelected}) => {
+      return {
+        ...style, 
+        backgroundColor: isSelected ? data.primaryColor : isFocused ? data.secondaryColor : "#FFFFFF",
+        color: isSelected ? "#FFFFFF" : data.primaryColor ,
+
+        ':active' : {
+          ...style[':active'],
+          backgroundColor:isSelected ? data.primaryColor: data.secondaryColor,
+        }
+      }
+    }
+  }
 
   const onsubmit = (data: CardFormType) => {
     cardModalClose()
     reset()
 
+    const beforeDueDate = data.dueDate
+
     const cardName = data.cardName
     const columnId = category.col_id
     const cardDescription = data.cardDescription
+    const dueDate = beforeDueDate.replace(/-/g, '/')
+    const cardColor = data.cardColor
 
-    createCard(cardName, columnId, cardDescription);
+    createCard(cardName, columnId, cardDescription, dueDate, cardColor);
   };
 
   return (
@@ -142,6 +174,40 @@ const Category: FC<Props> = (props) => {
                     type="text"
                     {...register("cardDescription")}
                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="cardLimmitDate">カードの期限</label>
+                  <input type="date"
+                    {...register("dueDate",)}
+                    className=""
+                  />
+                </div>
+                <div>
+                  <Controller
+                    control={control}
+                    name="cardColor"
+                    rules={{
+                      required: "Please Select State.",
+                    }}
+                    render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                        <Select
+                          name={name}
+                          ref={ref}
+                          styles={colorStyles}
+                          onChange={(e) => {
+                            onChange(e?.value);
+                          }}
+                          onBlur={onBlur}
+                          value={options?.find((option) => option.value === value)}
+                          options={options}
+                          placeholder="カードの色の入力"
+                          isSearchable={false}
+                          components={{
+                            IndicatorSeparator: () => null
+                          }}
+                        />
+                    )}
                   />
                 </div>
                 <button

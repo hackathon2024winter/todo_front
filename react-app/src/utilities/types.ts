@@ -33,8 +33,17 @@ export type SignupForm = {
 export type CardFormType = {
   cardName: string,
   cardDescription: string,
+  cardColor: string,
+  dueDate: string,
 }
 
 export type CategoryFormType = {
   inputData: string,
+}
+
+export type cardColorForm = {
+  value: string,
+  label: string,
+  primaryColor: string,
+  secondaryColor: string,
 }

@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { CardType } from "../utilities/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities"
+import classnames from "classnames"
 
 type Props ={
     card: CardType,
@@ -10,6 +11,15 @@ type Props ={
 
 const Card: FC<Props> = (props) => {
     const {card, deleteCard, } = props;
+
+    const beforeToday = new Date()
+    const year = String(beforeToday.getFullYear())
+    const month = String(beforeToday.getMonth() + 1);
+    const date = String(beforeToday.getDate())
+
+    const today = Date.parse(year + "/" + month + "/" + date)
+
+
 
     const [isCardDetailModal, setCardDetailModal] = useState<boolean>(false);
 
@@ -36,13 +46,16 @@ const Card: FC<Props> = (props) => {
 
     return (
         <>
-            <div className="bg-rose-300 my-2 mx-1 py-2 flex flex-row justify-between"
+            <div className={classnames("my-2", "mx-1", "py-2", "flex", "flex-row", "justify-between", card.color === "red" ? "bg-PoulRed" : card.color === "blue" ? "bg-PoulBlue" : card.color === "yellow" ? "bg-PoulYellow" : "bg-white")}
                 ref={setNodeRef}
                 style={style}
                 {...listeners}
                 {...attributes}
                 onClick={CardDetailModalOpen}
             >
+                {card.due_date && (
+                    today >= Date.parse(card.due_date) ? <div>⚠️</div> : ""
+                )}
                 <div className="text-black ">
                     {card.card_name}
                 </div>
