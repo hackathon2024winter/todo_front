@@ -12,6 +12,7 @@ export default {
         PoulYellow: "#E9C77B",
         PoulBlue: "#99ABB9",
         PoulGray: "#F5F5F5",
+        PoulIndigo: "#183346"
       },
     },
   },
