@@ -5,6 +5,7 @@ import { CardType, CardFormType, CategoryType, cardColorForm} from "../utilities
 import Card from "./Card";
 import { Controller, useForm } from "react-hook-form";
 import Select, {StylesConfig} from "react-select";
+import TrashIcon from "./icon/TrashIcon";
 
 type Props = {
   category: CategoryType;
@@ -103,6 +104,7 @@ const Category: FC<Props> = (props) => {
             h-[300px]
             max-h-[500px]
             rounded-md
+            ml-4
         "
     >
       <div
@@ -116,7 +118,7 @@ const Category: FC<Props> = (props) => {
         <div
           {...listeners}
           {...attributes}
-          className="text-[#183346]"
+          className="text-black text-xl py-2 px-3"
         >
           {category.col_name}
         </div>
@@ -124,14 +126,30 @@ const Category: FC<Props> = (props) => {
           onClick={() => {
             deleteCategory(category.col_id);
           }}
-          className=""
+          className="pr-3"
         >
-          ✖️
+          <TrashIcon />
         </button>
       </div>
-
-      <button className="text-black text-sm" onClick={cardModalOpen}>
-        ＋カードの追加
+      
+      <button className="text-black text-sm flex items-center pt-1 ml-1" onClick={cardModalOpen}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="w-6 h-6 black-500"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+        <div className="pl-1">
+          カードの追加
+        </div>
       </button>
       <div>
         <SortableContext items={cardsId}>
@@ -144,14 +162,25 @@ const Category: FC<Props> = (props) => {
         <div>
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-              <div className="flex justify-between">
-                <div className="text-black">
+              <div className="flex justify-between mb-3">
+                <div className="text-black text-lg text-center grow ">
                   カードの追加
                 </div>
-                <button
-                      onClick={cardModalClose}
-                    >
-                      ✖️
+                <button onClick={cardModalClose} className="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
                 </button>
               </div>
               <form onSubmit={handleSubmit(onsubmit)}>
@@ -163,7 +192,7 @@ const Category: FC<Props> = (props) => {
                     {...register("cardName", {
                       required: "タイトルは必須です",
                     })}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-400 focus:ring-2"
                   />
                   {errors.cardName && <div className="text-black">{errors.cardName.message}</div>}
                 </div>
@@ -173,14 +202,14 @@ const Category: FC<Props> = (props) => {
                     id="cardDescription"
                     type="text"
                     {...register("cardDescription")}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-400 focus:ring-2"
                   />
                 </div>
                 <div>
                   <label htmlFor="cardLimmitDate">カードの期限</label>
                   <input type="date"
                     {...register("dueDate",)}
-                    className=""
+                    className="text-white border-gray-300"
                   />
                 </div>
                 <div>
@@ -212,7 +241,7 @@ const Category: FC<Props> = (props) => {
                 </div>
                 <button
                   type="submit"
-                  className="w-20 px-4 py-2 bg-blue-500 text-white rounded"
+                  className="block ml-auto mr-auto m-2 rounded-lg bg-PoulBlue px-3 py-2 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-opacity-50 focus-visible:ring active:bg-gray-600 md:text-base"
                 >
                   送信
                 </button>
