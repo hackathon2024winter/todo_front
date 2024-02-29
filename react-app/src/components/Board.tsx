@@ -15,7 +15,7 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import { BaseURL } from "../utilities/base_url";
+import MenuBar from "./MenuBar";
 
 const Board: FC = () => {
   const [cards, setCards] = useState<CardType[]>([]);
@@ -26,87 +26,87 @@ const Board: FC = () => {
     null
   );
 
-  useEffect(() => {
-    const fetchCategory = async () => {
-      const response = await fetch(`${BaseURL()}/getcategories`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  // useEffect(() => {
+  //   const fetchCategory = async () => {
+  //     const response = await fetch(`${BaseURL()}/getcategories`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
-      const resData = await response.json();
-      // 解析したJSONからitems配列を取得します
-      const items = resData.data;
+  //     const resData = await response.json();
+  //     // 解析したJSONからitems配列を取得します
+  //     const items = resData.data;
 
-      // `categoryMap` はオブジェクトであり、キーに基づいてユニークな値を保持します。
-      // これは配列と異なり、JSONオブジェクトではキーがユニークであるため、
-      // 新しい要素を追加する際に "append"（末尾に追加する操作）は不要です。
-      // 既存のキーに新しい値を割り当てると、自動的にそのキーの値が更新されます。
-      const categoryMap: { [key: string]: CategoryType } = {};
+  //     // `categoryMap` はオブジェクトであり、キーに基づいてユニークな値を保持します。
+  //     // これは配列と異なり、JSONオブジェクトではキーがユニークであるため、
+  //     // 新しい要素を追加する際に "append"（末尾に追加する操作）は不要です。
+  //     // 既存のキーに新しい値を割り当てると、自動的にそのキーの値が更新されます。
+  //     const categoryMap: { [key: string]: CategoryType } = {};
 
-      // `items` 配列をforEachでループし、重複がないように `categoryMap` に要素を追加します。
-      // ここでのキーは `col_id` であり、これがJSONオブジェクトのユニークなプロパティとなります。
-      items.forEach((item: CategoryType) => {
-        if (!categoryMap[item.col_id]) {
-          // ここでの割り当ては、対応するキーが既に存在しない場合にのみ行われます。
-          // キーが既に存在する場合、新しい割り当ては無視され、値は保持されます。
-          categoryMap[item.col_id] = {
-            col_pos: item.col_pos,
-            col_id: item.col_id,
-            col_name: item.col_name,
-            description: item.description,
-          };
-        }
-      });
+  //     // `items` 配列をforEachでループし、重複がないように `categoryMap` に要素を追加します。
+  //     // ここでのキーは `col_id` であり、これがJSONオブジェクトのユニークなプロパティとなります。
+  //     items.forEach((item: CategoryType) => {
+  //       if (!categoryMap[item.col_id]) {
+  //         // ここでの割り当ては、対応するキーが既に存在しない場合にのみ行われます。
+  //         // キーが既に存在する場合、新しい割り当ては無視され、値は保持されます。
+  //         categoryMap[item.col_id] = {
+  //           col_pos: item.col_pos,
+  //           col_id: item.col_id,
+  //           col_name: item.col_name,
+  //           description: item.description,
+  //         };
+  //       }
+  //     });
 
-      // マップからソートされた配列を作成し、状態を更新
-      const categories = Object.values(categoryMap).sort(
-        (a, b) => a.col_pos - b.col_pos
-      );
-      setCategorys(categories);
-    };
+  //     // マップからソートされた配列を作成し、状態を更新
+  //     const categories = Object.values(categoryMap).sort(
+  //       (a, b) => a.col_pos - b.col_pos
+  //     );
+  //     setCategorys(categories);
+  //   };
 
-    const fetchCard = async () => {
-      const response = await fetch(`${BaseURL()}/getcards`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  //   const fetchCard = async () => {
+  //     const response = await fetch(`${BaseURL()}/getcards`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
-      const resData = await response.json();
-      // 解析したJSONからitems配列を取得します
-      const items = resData.data;
+  //     const resData = await response.json();
+  //     // 解析したJSONからitems配列を取得します
+  //     const items = resData.data;
 
-      const cardMap: { [key: string]: CardType } = {};
+  //     const cardMap: { [key: string]: CardType } = {};
 
-      items.forEach((item: CardType) => {
-        // カードのMapの重複を除いて更新
-        if (!cardMap[item.card_id]) {
-          cardMap[item.card_id] = {
-            card_pos: item.card_pos,
-            card_id: item.card_id,
-            col_id: item.col_id,
-            card_name: item.card_name,
-            input_date: item.input_date,
-            due_date: item.due_date,
-            color: item.color,
-            description: item.description,
-          };
-        }
-      });
+  //     items.forEach((item: CardType) => {
+  //       // カードのMapの重複を除いて更新
+  //       if (!cardMap[item.card_id]) {
+  //         cardMap[item.card_id] = {
+  //           card_pos: item.card_pos,
+  //           card_id: item.card_id,
+  //           col_id: item.col_id,
+  //           card_name: item.card_name,
+  //           input_date: item.input_date,
+  //           due_date: item.due_date,
+  //           color: item.color,
+  //           description: item.description,
+  //         };
+  //       }
+  //     });
 
-      // マップからソートされた配列を作成し、状態を更新
-      const cards = Object.values(cardMap).sort(
-        (a, b) => a.card_pos - b.card_pos
-      );
-      setCards(cards);
-    };
+  //     // マップからソートされた配列を作成し、状態を更新
+  //     const cards = Object.values(cardMap).sort(
+  //       (a, b) => a.card_pos - b.card_pos
+  //     );
+  //     setCards(cards);
+  //   };
 
-    fetchCategory();
-    fetchCard();
-  }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
+  //   fetchCategory();
+  //   fetchCard();
+  // }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
 
   const categorysId = useMemo(
     () => categorys.map((category) => category.col_id),
@@ -128,16 +128,26 @@ const Board: FC = () => {
   const createCard = (
     card_name: string,
     col_id: string,
-    card_description: string
+    card_description: string,
+    due_date: string,
+    color: string
   ) => {
+
+    const today = new Date()
+    const year = String(today.getFullYear())
+    const month = String(today.getMonth() + 1);
+    const date = String(today.getDate())
+
+    const input_date = year + "/" + month + "/" + date
+
     const cardToAdd: CardType = {
       card_pos: cards.length,
       card_id: uuid(),
       col_id: col_id,
       card_name: card_name,
-      input_date: "string",
-      due_date: "string",
-      color: "string",
+      input_date: input_date,
+      due_date: due_date,
+      color: color,
       description: card_description,
     };
 
@@ -284,6 +294,7 @@ const Board: FC = () => {
 
   return (
     <div className="bg-PoulGray h-full">
+      <MenuBar/>
       <DndContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
@@ -291,7 +302,7 @@ const Board: FC = () => {
         sensors={sensors}
       >
         <div className=" m-auto flex flex-row gap-4 bg-PoulGray">
-          <div className=" flex flex-row grap-4 gap-4">
+          <div className=" flex flex-row ">
             <SortableContext items={categorysId}>
               {categorys.map((category) => (
                 <Category
@@ -311,7 +322,7 @@ const Board: FC = () => {
             onClick={categoryModalOpen}
             className="
         h-[60px]
-         rounded-lg p-2 
+        rounded-lg p-2 
         bg-PoulOrange 
         cursor-pointer active:scale-95 focus:outline-none
         select-none
@@ -343,7 +354,7 @@ const Board: FC = () => {
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
             <div className="relative top-20 mx-auto p-5 border w-1/5 shadow-lg rounded-md bg-white">
               <div className="flex justify-between mb-3">
-                <div className="text-black text-lg text-center grow">
+                <div className="text-black text-lg text-center grow ">
                   カテゴリの追加
                 </div>
                 <button onClick={categoryModalClose} className="">
