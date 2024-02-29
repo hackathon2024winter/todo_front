@@ -1,10 +1,10 @@
 import { FC, useMemo, useState } from "react";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { CardType, CardFormType, CategoryType, cardColorForm} from "../utilities/types";
+import { CardType, CardFormType, CategoryType, cardColorForm } from "../utilities/types";
 import Card from "./Card";
 import { Controller, useForm } from "react-hook-form";
-import Select, {StylesConfig} from "react-select";
+import Select, { StylesConfig } from "react-select";
 import TrashIcon from "./icon/TrashIcon";
 
 type Props = {
@@ -49,31 +49,32 @@ const Category: FC<Props> = (props) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors,},
+    formState: { errors, },
     control,
   } = useForm<CardFormType>();
 
   const options: Array<cardColorForm> = [
-    {value: "red", label: "赤", primaryColor: "#E39C74", secondaryColor: "#FaDCD0"},
-    {value: "blue", label: "青", primaryColor: "#97BDD3", secondaryColor: "#D3ECF3"},
-    {value: "yellow", label: "黄", primaryColor: "#E2B856", secondaryColor: "#FAE9C2"}
+    { value: "red", label: "赤", primaryColor: "#E39C74", secondaryColor: "#FaDCD0" },
+    { value: "blue", label: "青", primaryColor: "#97BDD3", secondaryColor: "#D3ECF3" },
+    { value: "yellow", label: "黄", primaryColor: "#E2B856", secondaryColor: "#FAE9C2" }
   ]
 
-  const colorStyles: StylesConfig<cardColorForm> ={
-    control: (styles) => ({...styles, 
+  const colorStyles: StylesConfig<cardColorForm> = {
+    control: (styles) => ({
+      ...styles,
       backgroundColor: 'white',
       borderRadius: '7px',
       border: '1px solid gray',
     }),
-    option: (style, {data, isFocused, isSelected}) => {
+    option: (style, { data, isFocused, isSelected }) => {
       return {
-        ...style, 
+        ...style,
         backgroundColor: isSelected ? data.primaryColor : isFocused ? data.secondaryColor : "#FFFFFF",
-        color: isSelected ? "#FFFFFF" : data.primaryColor ,
+        color: isSelected ? "#FFFFFF" : data.primaryColor,
 
-        ':active' : {
+        ':active': {
           ...style[':active'],
-          backgroundColor:isSelected ? data.primaryColor: data.secondaryColor,
+          backgroundColor: isSelected ? data.primaryColor : data.secondaryColor,
         }
       }
     }
@@ -131,7 +132,7 @@ const Category: FC<Props> = (props) => {
           <TrashIcon />
         </button>
       </div>
-      
+
       <button className="text-black text-sm flex items-center pt-1 ml-1" onClick={cardModalOpen}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -220,22 +221,22 @@ const Category: FC<Props> = (props) => {
                       required: "Please Select State.",
                     }}
                     render={({ field: { onChange, onBlur, value, name, ref } }) => (
-                        <Select
-                          name={name}
-                          ref={ref}
-                          styles={colorStyles}
-                          onChange={(e) => {
-                            onChange(e?.value);
-                          }}
-                          onBlur={onBlur}
-                          value={options?.find((option) => option.value === value)}
-                          options={options}
-                          placeholder="カードの色の入力"
-                          isSearchable={false}
-                          components={{
-                            IndicatorSeparator: () => null
-                          }}
-                        />
+                      <Select
+                        name={name}
+                        ref={ref}
+                        styles={colorStyles}
+                        onChange={(e) => {
+                          onChange(e?.value);
+                        }}
+                        onBlur={onBlur}
+                        value={options?.find((option) => option.value === value)}
+                        options={options}
+                        placeholder="カードの色の入力"
+                        isSearchable={false}
+                        components={{
+                          IndicatorSeparator: () => null
+                        }}
+                      />
                     )}
                   />
                 </div>
