@@ -19,6 +19,8 @@ import AddCategoryModal from "./AddCategoryModal";
 const Board: FC = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const [cards, setCards] = useState<CardType[]>([]);
+    const [dnds, setDnds] = useState<CategoryType[] | CardType[]>([]);
+
     const [draggedCategory, setdraggedCategory] = useState<CategoryType | null>(
         null
     );
@@ -99,6 +101,8 @@ const Board: FC = () => {
             },
         ];
         setCards(initialCards);
+
+        setDnds([...initialCategories, ...initialCards])
     }, []); // 空の依存配列を渡して、マウント時にのみ実行
 
     const onDragStart = useCallback(
