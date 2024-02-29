@@ -1,16 +1,13 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import { CardType, CategoryType } from "../utilities/ttypes";
+import { FC, useState } from "react";
+import { CardType, CategoryType, DndItemType } from "../utilities/ttypes";
 import {
     DraggableHandle,
     DraggableItem,
     DraggableList,
 } from "./DraggableComponents";
-import AddCardModal from "./AddCardModal";
-import { DragEndEvent, DragMoveEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 import Card from "./Card";
+import AddCardModal from "./AddCardModal";
 
-// CategoryPropsに渡すべきプロパティを集約する。
 interface CategoryProps {
     category: CategoryType;
     className?: string;
@@ -19,6 +16,7 @@ interface CategoryProps {
     ) => void;
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
     cards: CardType[];
+    draggedDnd?: DndItemType;
 }
 
 const Category: FC<CategoryProps> = ({
@@ -28,52 +26,9 @@ const Category: FC<CategoryProps> = ({
     setCards,
     cards,
 }) => {
+
     // カテゴリ追加の表示状態を管理するstate
     const [isAddCardModal, setAddCardModal] = useState(false);
-    const [draggedCard, setdraggedCard] = useState<CardType | null>(null);
-
-    const onDragStart = useCallback(
-        (e: DragStartEvent) => {
-            const { active } = e;
-            const activeCard = cards.find((card) => card.id === active.id);
-            setdraggedCard(activeCard || null);
-        },
-        [cards]
-    );
-
-    const onDragEnd = useCallback(
-        (e: DragEndEvent) => {
-            const { active, over } = e;
-            setdraggedCard(null);
-
-            // `active`がドラッグされた要素、`over`がドロップされた要素
-            if (active.id !== over?.id) {
-                setCards((currentCards) => {
-                    const oldIndex = currentCards.findIndex(
-                        (card) => card.id === active.id
-                    );
-                    const newIndex = currentCards.findIndex(
-                        (card) => card.id === over?.id
-                    );
-
-                    // `arrayMove`で新しい配列を作成
-                    return arrayMove(currentCards, oldIndex, newIndex);
-                });
-            }
-        },
-        [setCards]
-    );
-
-    const onDragMove = useCallback(
-        (e: DragMoveEvent) => {
-            const { active, over } = e;
-            const activeCard = cards.find((card) => card.id === active.id);
-            console.log(`Move: ${activeCard?.id} Over: ${over?.id}`);
-            setdraggedCard(activeCard || null);
-        },
-        [cards]
-    );
-
 
     // カテゴリ追加を開く関数
     const openAddCard = () => {
@@ -109,45 +64,32 @@ const Category: FC<CategoryProps> = ({
                             ✖️
                         </button>
                     </div>
-
                     <button className="text-black text-sm" onClick={openAddCard}>
                         ＋カードの追加
                     </button>
 
                     <DraggableList<CardType>
-                        items={cards.filter(card => card.col_id === category.id)}
+                        items={cards.filter((card) => card.col_id === category.id)}
                         layout="grid"
-                        onDragStart={onDragStart}
-                        onDragEnd={onDragEnd}
-                        onDragMove={onDragMove}
                     >
                         <div className=" gap-4">
-                            {cards.map((card) =>
+                            {cards.map((card) => (
                                 card.col_id === category.id && (
+
                                     <div key={card.id} className="">
                                         <Card
                                             card={card}
                                             className={
-                                                "bg-rose-300 my-1 mx-1 flex flex-row justify-between"
+                                                "bg-rose-300 my-1 mx-1 pr-2 flex flex-row justify-between"
                                             }
                                             setCards={setCards}
                                         />
                                     </div>
-                                ))}
+                                )
+                            ))}
                         </div>
                     </DraggableList>
                 </div>
-                {/* <DragOverlay>
-                    {draggedCard ? (
-                        <Card
-                            card={draggedCard}
-                            className={
-                                "bg-rose-300 my-1 mx-1 flex flex-row justify-between"
-                            }
-                            setCards={setCards}
-                        />
-                    ) : null}
-                </DragOverlay> */}
             </DraggableItem>
             {isAddCardModal && (
                 <AddCardModal

@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { DraggableHandle, DraggableItem } from "./DraggableComponents";
+import { FC } from "react"
 import { CardType } from "../utilities/ttypes";
+import { DraggableHandle, DraggableItem } from "./DraggableComponents";
 
 interface CardProps {
     card: CardType;
@@ -8,32 +8,34 @@ interface CardProps {
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
 }
 
-const Card: FC<CardProps> = ({ card, className, setCards }) => {
-
+const Card: FC<CardProps> = ({
+    card,
+    className,
+    setCards
+}) => {
     const deleteCard = (id: string | number) => {
         setCards((cards) => {
             return cards.filter((card) => card.id !== id);
         });
     };
-
     return (
         <>
             <DraggableItem id={card.id}>
                 <div className={className}>
-                    <div className="flex justify-between items-center p-1">
+                    <div className="flex justify-between items-center p-">
                         <DraggableHandle
                             id={card.id}
                             children={card.card_name}
                             imgPath={"/drag-handle-corner-svgrepo-com.svg"}
                         />
-                        <button
-                            onClick={() => {
-                                deleteCard(card.id);
-                            }}
-                        >
-                            ✖️
-                        </button>
                     </div>
+                    <button
+                        onClick={() => {
+                            deleteCard(card.id);
+                        }}
+                    >
+                        ✖️
+                    </button>
                 </div>
             </DraggableItem>
             {/* {isAddCardModal && (
@@ -45,6 +47,6 @@ const Card: FC<CardProps> = ({ card, className, setCards }) => {
             )} */}
         </>
     );
-};
+}
 
-export default Card;
+export default Card

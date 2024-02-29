@@ -20,7 +20,7 @@ const AddCategoryModal: FC<AddCategoryModalProps> = ({
         setCategories((currentCategories) => [
             ...currentCategories,
             {
-                id: uuid(),
+                id: "category-" + uuid(),
                 col_pos: currentCategories.length,
                 col_name: colName,
                 description: "", // ここを必要に応じて更新

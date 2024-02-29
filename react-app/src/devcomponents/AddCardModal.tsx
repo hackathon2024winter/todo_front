@@ -19,7 +19,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
         setCards((currentCards) => [
             ...currentCards,
             {
-                id: uuid(),
+                id: "card-" + uuid(),
                 card_pos: currentCards.length,
                 col_id: categoryId,
                 card_name: cardName,
