@@ -22,7 +22,7 @@ const Card: FC<CardProps> = ({
         <>
             <DraggableItem id={card.id}>
                 <div className={className}>
-                    <div className="flex justify-between items-center p-">
+                    <div className="flex justify-between items-center p-1">
                         <DraggableHandle
                             id={card.id}
                             children={card.card_name}
