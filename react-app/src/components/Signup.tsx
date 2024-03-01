@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { SignupForm } from "../utilities/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseURL } from "../utilities/base_url";
-import TitleIcon from "../../public/titile-icon.svg";
+import TitleIcon from "../../public/title-icon.svg";
 import { Link } from "react-router-dom";
 
 const Signup: FC = () => {
