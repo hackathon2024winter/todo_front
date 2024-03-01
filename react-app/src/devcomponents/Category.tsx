@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { CardType, CategoryType, DndItemType } from "../utilities/ttypes";
+import { CardType, CategoryType } from "../utilities/ttypes";
 import {
     DraggableHandle,
     DraggableItem,
@@ -7,6 +7,7 @@ import {
 } from "./DraggableComponents";
 import Card from "./Card";
 import AddCardModal from "./AddCardModal";
+import classnames from "classnames";
 
 interface CategoryProps {
     category: CategoryType;
@@ -16,7 +17,6 @@ interface CategoryProps {
     ) => void;
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
     cards: CardType[];
-    draggedDnd?: DndItemType;
 }
 
 const Category: FC<CategoryProps> = ({
@@ -86,12 +86,16 @@ const Category: FC<CategoryProps> = ({
                         <div className=" gap-4">
                             {cards.map((card) => (
                                 card.col_id === category.id && (
-
                                     <div key={card.id} className="">
                                         <Card
                                             card={card}
                                             className={
-                                                "bg-rose-300 my-1 mx-1 pr-2 flex flex-row justify-between"
+                                                classnames("my-2", "mx-1", "py-2", "bg-[#F0EFEE]", "flex", "flex-row",
+                                                    "justify-between", "items-center", "rounded-sm",
+                                                    card.color === "red" ? "border-l-[18px] border-solid border-PoulRed" :
+                                                        card.color === "blue" ? "border-l-[18px] border-solid border-PoulBlue" :
+                                                            card.color === "yellow" ? "border-l-[18px] border-solid border-PoulYellow" :
+                                                                "bg-white")
                                             }
                                             setCards={setCards}
                                         />

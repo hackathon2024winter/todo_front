@@ -23,6 +23,7 @@ import AddCategoryModal from "./AddCategoryModal";
 import Card from "./Card";
 import { BaseURL } from "../utilities/base_url";
 import MenuBar from "./MenuBar";
+import classnames from "classnames";
 
 const Board: FC = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
@@ -332,7 +333,12 @@ const Board: FC = () => {
                             <Card
                                 card={draggedCard}
                                 className={
-                                    "bg-rose-300 my-1 mx-1 flex flex-row justify-between"
+                                    classnames("my-2", "mx-1", "py-2", "bg-[#F0EFEE]", "flex", "flex-row",
+                                        "justify-between", "items-center", "rounded-sm",
+                                        draggedCard.color === "red" ? "border-l-[18px] border-solid border-PoulRed" :
+                                            draggedCard.color === "blue" ? "border-l-[18px] border-solid border-PoulBlue" :
+                                                draggedCard.color === "yellow" ? "border-l-[18px] border-solid border-PoulYellow" :
+                                                    "bg-white")
                                 }
                                 setCards={setCards}
                             />
