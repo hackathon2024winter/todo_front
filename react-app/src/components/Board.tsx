@@ -294,7 +294,7 @@ const Board: FC = () => {
 
   return (
     <div className="bg-PoulGray h-full">
-      <MenuBar/>
+      <MenuBar />
       <DndContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
