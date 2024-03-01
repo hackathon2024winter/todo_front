@@ -2,10 +2,11 @@ import { FC, useState } from "react";
 import { LoginForm } from "../utilities/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseURL } from "../utilities/base_url";
-import TitleIcon from "../../public/titile-icon.svg";
-import { Link } from "react-router-dom";
+import TitleIcon from "../../public/title-icon.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login: FC = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -31,7 +32,8 @@ const Login: FC = () => {
       });
       const responseData = await response.json(); // レスポンスのJSONを解析
       if (response.ok) {
-        setMessage("ログインに成功しました。"); // 成功メッセージを設定
+        // setMessage("ログインに成功しました。"); // 成功メッセージを設定
+        navigate("/board")
       } else {
         setMessage(responseData.detail || "ログインに失敗しました。"); // 失敗メッセージを設定
       }
