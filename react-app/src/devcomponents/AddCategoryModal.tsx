@@ -69,14 +69,14 @@ const AddCategoryModal: FC<AddCategoryModalProps> = ({
                                 style={{ width: '300px' }}
                             />
                             {errors.col_name && (
-                                <div className="text-black">{errors.col_name.message}</div>
+                                <div className="text-Warning">{errors.col_name.message}</div>
                             )}
                         </div>
                         <div className="mb-3 text-center">
                             <input
                                 id="description"
                                 type="text"
-                                placeholder="カテゴリ名の説明 (任意)"
+                                placeholder="カテゴリの説明 (任意)"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
                                 style={{ width: '300px' }}
                             />

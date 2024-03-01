@@ -88,7 +88,7 @@ const Login: FC = () => {
                   })}
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-PoulBlue transition duration-100 focus:ring"
                 />
-                {errors.email && <div>{errors.email.message}</div>}
+                {errors.email && <div className="text-Warning">{errors.email.message}</div>}
               </div>
 
               <div>
@@ -107,7 +107,7 @@ const Login: FC = () => {
                   })}
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-PoulBlue transition duration-100 focus:ring"
                 />
-                {errors.password && <div>{errors.password.message}</div>}
+                {errors.password && <div className="text-Warning">{errors.password.message}</div>}
               </div>
 
               <button
