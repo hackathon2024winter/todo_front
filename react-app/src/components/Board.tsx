@@ -15,8 +15,7 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import MenuBar from "./MenuBar";;
-import { BaseURL } from "../utilities/base_url";
+import MenuBar from "./MenuBar";
 
 const Board: FC = () => {
   const [cards, setCards] = useState<CardType[]>([]);
@@ -151,202 +150,177 @@ const Board: FC = () => {
       color: color,
       description: card_description,
     };
-    card_pos: 0,
-      card_id: uuid(),
-        col_id: card.col_id,
-          card_name: card.card_name,
-            input_date: card.input_date,
-              due_date: card.due_date,
-                color: card.color,
-                  description: card.description,
-    };
 
-  setCards([...cards, cardToAdd]);
-};
-
-const deleteCard = (id: string) => {
-  const filteredCards = cards.filter((card) => card.card_id !== id);
-  setCards(filteredCards);
-};
-
-const createCategory = (col_name: string) => {
-  const categoryToAdd: CategoryType = {
-    col_id: uuid(),
-    col_name: col_name,
-    col_pos: categorys.length,
-    description: "string",
+    setCards([...cards, cardToAdd]);
   };
 
-  setCategorys([...categorys, categoryToAdd]);
-};
+  const deleteCard = (id: string) => {
+    const filteredCards = cards.filter((card) => card.card_id !== id);
+    setCards(filteredCards);
+  };
 
-const deleteCategory = (id: string | number) => {
-  const filteredCategorys = categorys.filter(
-    (category) => category.col_id !== id
-  );
-  setCategorys(filteredCategorys);
+  const createCategory = (col_name: string) => {
+    const categoryToAdd: CategoryType = {
+      col_id: uuid(),
+      col_name: col_name,
+      col_pos: categorys.length,
+      description: "string",
+    };
 
-  const newCards = cards.filter((card) => card.col_id !== id);
-  setCards(newCards);
-};
+    setCategorys([...categorys, categoryToAdd]);
+  };
 
-const categoryModalOpen = () => {
-  setCategoryModal(true);
-};
+  const deleteCategory = (id: string | number) => {
+    const filteredCategorys = categorys.filter(
+      (category) => category.col_id !== id
+    );
+    setCategorys(filteredCategorys);
 
-const categoryModalClose = () => {
-  setCategoryModal(false);
-};
+    const newCards = cards.filter((card) => card.col_id !== id);
+    setCards(newCards);
+  };
 
-const {
-  register,
-  handleSubmit,
-  reset,
-  formState: { errors },
-} = useForm<CategoryFormType>();
+  const categoryModalOpen = () => {
+    setCategoryModal(true);
+  };
 
-const onsubmit = (data: CategoryFormType) => {
-  categoryModalClose();
-  reset();
+  const categoryModalClose = () => {
+    setCategoryModal(false);
+  };
 
-  const col_name = data.inputData;
-  createCategory(col_name);
-};
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CategoryFormType>();
 
-const sensors = useSensors(
-  useSensor(PointerSensor, {
-    activationConstraint: {
-      distance: 5,
-    },
-  })
-);
+  const onsubmit = (data: CategoryFormType) => {
+    categoryModalClose();
+    reset();
 
-const onDragStart = (event: DragStartEvent) => {
-  if (event.active.data.current?.type === "CategoryType") {
-    setActiveCategory(event.active.data.current.category);
-    return;
-  }
+    const col_name = data.inputData;
+    createCategory(col_name);
+  };
 
-  if (event.active.data.current?.type === "CardType") {
-    setActiveCard(event.active.data.current.card);
-    return;
-  }
-};
-
-const onDragEnd = (event: DragEndEvent) => {
-  const { active, over } = event;
-  if (!over) return;
-
-  const activeCategoryId = active.id;
-  const overCategoryId = over.id;
-
-  if (activeCategoryId === overCategoryId) return;
-
-  const activeCategoryIndex = categorys.findIndex(
-    (category) => category.col_id === activeCategoryId
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
   );
 
-  const overCategoryIndex = categorys.findIndex(
-    (category) => category.col_id === overCategoryId
-  )
+  const onDragStart = (event: DragStartEvent) => {
+    if (event.active.data.current?.type === "CategoryType") {
+      setActiveCategory(event.active.data.current.category);
+      return;
+    }
 
-  // if (overCategoryIndex === 0) return;
-  // if (overCategoryIndex === categorys.length -1) return;
+    if (event.active.data.current?.type === "CardType") {
+      setActiveCard(event.active.data.current.card);
+      return;
+    }
+  };
 
-  // const activeCategory = categorys[activeCategoryIndex];
+  const onDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
 
-  // const beforeOverCategoryIndex = overCategoryIndex - 1;
+    const activeCategoryId = active.id;
+    const overCategoryId = over.id;
 
-  // const afterOverCategoryIndex = overCategoryIndex + 1;
+    if (activeCategoryId === overCategoryId) return;
 
-  // const overCategoryPosition = categorys[overCategoryIndex].col_pos
+    const activeCategoryIndex = categorys.findIndex(
+      (category) => category.col_id === activeCategoryId
+    );
 
-  // const beforeOverCategoryPosition = categorys[beforeOverCategoryIndex].col_pos
+    const overCategoryIndex = categorys.findIndex(
+      (category) => category.col_id === overCategoryId
+    );
 
-  // const afterOverCategoryPosition = categorys[afterOverCategoryIndex].col_pos
-  // 上から下への移動の場合(active > over) overのインデックスのposとafterのインデックスのposの比較を行う
-  // 下から上への移動の場合（active < over) oveｒのインデックスのposとbeforeのインデックスのposの比較を行う
-  setCategorys((categorys) => {
-    return arrayMove(categorys, activeCategoryIndex, overCategoryIndex);
-  });
-};
-
-const onDragOver = (event: DragOverEvent) => {
-  setActiveCard(null);
-  setActiveCategory(null);
-
-  const { active, over } = event;
-  if (!over) return;
-
-  const activeCardId = active.id;
-  const overCardId = over.id;
-
-  const isActiveCard = active.data.current?.type === "CardType";
-  const isOverCard = over.data.current?.type === "CardType";
-
-  if (activeCardId === overCardId) return;
-  if (!isActiveCard) return;
-
-  if (isActiveCard && isOverCard) {
-    setCards((cards) => {
-      const activeCardIndex = cards.findIndex(
-        (card) => card.card_id === activeCardId
-      );
-
-      const overCardIndex = cards.findIndex(
-        (card) => card.card_id === overCardId
-      );
-
-      cards[activeCardIndex].col_id = cards[overCardIndex].col_id;
-
-      return arrayMove(cards, activeCardIndex, overCardIndex);
+    setCategorys((categorys) => {
+      return arrayMove(categorys, activeCategoryIndex, overCategoryIndex);
     });
-  }
+  };
 
-  const isAcrossCategory = over.data.current?.type === "CategoryType";
+  const onDragOver = (event: DragOverEvent) => {
+    setActiveCard(null);
+    setActiveCategory(null);
 
-  if (isActiveCard && isAcrossCategory) {
-    setCards((cards) => {
-      const activeCardIndex = cards.findIndex(
-        (card) => card.card_id == activeCardId
-      );
+    const { active, over } = event;
+    if (!over) return;
 
-      cards[activeCardIndex].col_id = overCardId.toString();
+    const activeCardId = active.id;
+    const overCardId = over.id;
 
-      return arrayMove(cards, activeCardIndex, activeCardIndex);
-    });
-  }
-};
+    const isActiveCard = active.data.current?.type === "CardType";
+    const isOverCard = over.data.current?.type === "CardType";
 
-return (
-  <div className="bg-PoulGray h-full">
-    <MenuBar />
-    <DndContext
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
-      sensors={sensors}
-    >
-      <div className=" m-auto flex flex-row gap-4 bg-PoulGray">
-        <div className=" flex flex-row ">
-          <SortableContext items={categorysId}>
-            {categorys.map((category) => (
-              <Category
-                key={category.col_id}
-                category={category}
-                deleteCategory={deleteCategory}
-                createCard={createCard}
-                cards={cards.filter(
-                  (card) => card.col_id === category.col_id
-                )}
-                deleteCard={deleteCard}
-              />
-            ))}
-          </SortableContext>
-        </div>
-        <button
-          onClick={categoryModalOpen}
-          className="
+    if (activeCardId === overCardId) return;
+    if (!isActiveCard) return;
+
+    if (isActiveCard && isOverCard) {
+      setCards((cards) => {
+        const activeCardIndex = cards.findIndex(
+          (card) => card.card_id === activeCardId
+        );
+
+        const overCardIndex = cards.findIndex(
+          (card) => card.card_id === overCardId
+        );
+
+        cards[activeCardIndex].col_id = cards[overCardIndex].col_id;
+
+        return arrayMove(cards, activeCardIndex, overCardIndex);
+      });
+    }
+
+    const isAcrossCategory = over.data.current?.type === "CategoryType";
+
+    if (isActiveCard && isAcrossCategory) {
+      setCards((cards) => {
+        const activeCardIndex = cards.findIndex(
+          (card) => card.card_id == activeCardId
+        );
+
+        cards[activeCardIndex].col_id = overCardId.toString();
+
+        return arrayMove(cards, activeCardIndex, activeCardIndex);
+      });
+    }
+  };
+
+  return (
+    <div className="bg-PoulGray h-full">
+      <MenuBar />
+      <DndContext
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+        sensors={sensors}
+      >
+        <div className=" m-auto flex flex-row gap-4 bg-PoulGray">
+          <div className=" flex flex-row ">
+            <SortableContext items={categorysId}>
+              {categorys.map((category) => (
+                <Category
+                  key={category.col_id}
+                  category={category}
+                  deleteCategory={deleteCategory}
+                  createCard={createCard}
+                  cards={cards.filter(
+                    (card) => card.col_id === category.col_id
+                  )}
+                  deleteCard={deleteCard}
+                />
+              ))}
+            </SortableContext>
+          </div>
+          <button
+            onClick={categoryModalOpen}
+            className="
         h-[60px]
         rounded-lg p-2 
         bg-PoulOrange 
@@ -354,79 +328,79 @@ return (
         select-none
         hover:text-white hover:bg-opacity-50
         "
-        >
-          <div className="flex justify-center text-black-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6 black-500"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
-            カテゴリの追加
-          </div>
-        </button>
-      </div>
-    </DndContext>
-    {isCategoryModal && (
-      <div>
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-          <div className="relative top-20 mx-auto p-5 border w-1/5 shadow-lg rounded-md bg-white">
-            <div className="flex justify-between mb-3">
-              <div className="text-black text-lg text-center grow ">
-                カテゴリの追加
-              </div>
-              <button onClick={categoryModalClose} className="">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleSubmit(onsubmit)}>
-              <div className="mb-3 text-center">
-                <input
-                  id="inputData"
-                  type="text"
-                  placeholder="カテゴリ名を入力"
-                  {...register("inputData", {
-                    required: "カテゴリ名は必須です",
-                  })}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
-                />
-                {errors.inputData && (
-                  <div className="text-black">{errors.inputData.message}</div>
-                )}
-              </div>
-              <button
-                type="submit"
-                className="block ml-auto mr-auto m-2 rounded-lg bg-PoulBlue px-3 py-2 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-opacity-50 focus-visible:ring active:bg-gray-600 md:text-base"
+          >
+            <div className="flex justify-center text-black-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 black-500"
               >
-                送信
-              </button>
-            </form>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              カテゴリの追加
+            </div>
+          </button>
+        </div>
+      </DndContext>
+      {isCategoryModal && (
+        <div>
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+            <div className="relative top-20 mx-auto p-5 border w-1/5 shadow-lg rounded-md bg-white">
+              <div className="flex justify-between mb-3">
+                <div className="text-black text-lg text-center grow ">
+                  カテゴリの追加
+                </div>
+                <button onClick={categoryModalClose} className="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <form onSubmit={handleSubmit(onsubmit)}>
+                <div className="mb-3 text-center">
+                  <input
+                    id="inputData"
+                    type="text"
+                    placeholder="カテゴリ名を入力"
+                    {...register("inputData", {
+                      required: "カテゴリ名は必須です",
+                    })}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
+                  />
+                  {errors.inputData && (
+                    <div className="text-black">{errors.inputData.message}</div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="block ml-auto mr-auto m-2 rounded-lg bg-PoulBlue px-3 py-2 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-opacity-50 focus-visible:ring active:bg-gray-600 md:text-base"
+                >
+                  送信
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
 };
 export default Board;

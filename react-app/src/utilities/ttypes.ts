@@ -50,10 +50,20 @@ export type SignupForm = {
 }
 
 export type CardFormType = {
-    inputData: string,
+    card_name: string,
+    description: string,
+    color: string,
+    due_date: string,
 }
 
 export type CategoryFormType = {
     col_name: string,
     description: string;
+}
+
+export type CardColorForm = {
+    value: string,
+    label: string,
+    primaryColor: string,
+    secondaryColor: string,
 }
