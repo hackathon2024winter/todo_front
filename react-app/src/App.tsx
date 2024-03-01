@@ -7,7 +7,7 @@ import {
 import ErrorPage from "./components/ErrorPage";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-import Board from "./components/Board";
+import Board from "./devcomponents/Board";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
