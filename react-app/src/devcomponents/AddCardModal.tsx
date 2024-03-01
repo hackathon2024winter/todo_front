@@ -43,7 +43,8 @@ const AddCardModal: FC<AddCardModalProps> = ({
         }
     };
 
-    const { register, handleSubmit, reset, formState: { errors, }, control, } = useForm<CardFormType>();
+    const { register, handleSubmit, watch, reset, formState: { errors, }, control, } = useForm<CardFormType>();
+    const dueDateValue = watch("due_date");
 
     const addCard = (data: CardFormType) => {
         closeAddCard();
@@ -91,6 +92,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
                     <form onSubmit={handleSubmit(addCard)}>
                         <div>
                             <label htmlFor="card_name" className="text-black">カード名</label>
+                            <br />
                             <input
                                 id="card_name"
                                 type="text"
@@ -112,10 +114,18 @@ const AddCardModal: FC<AddCardModalProps> = ({
                         </div>
                         <div>
                             <label htmlFor="due_date">カードの期限</label>
-                            <input type="due_date"
-                                {...register("due_date",)}
+                            <input type="date"
+                                {...register("due_date", {
+                                    // ここでカスタムバリデーションやルールを追加できます。
+                                    required: "期限日は必須です",
+                                    // onChange: (e) => {  // ここにカスタムの onChange ロジックを追加する
+                                    //     // e.target.value には選択された日付が 'YYYY-MM-DD' 形式で含まれています。
+                                    //     console.log(e.target.value);
+                                    // }
+                                })}
                                 className="text-white border-gray-300"
                             />
+                            <p>選択された日付: {dueDateValue}</p>
                         </div>
                         <div>
                             <Controller
@@ -130,7 +140,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                         ref={ref}
                                         styles={colorStyles}
                                         onChange={(e) => {
-                                            onChange(e?.value);
+                                            onChange(e?.valueOf());
                                         }}
                                         onBlur={onBlur}
                                         value={options?.find((option) => option.value === value)}

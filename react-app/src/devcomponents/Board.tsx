@@ -312,7 +312,7 @@ const Board: FC = () => {
                                     setCategories={setCategories} //状態categoriesとそのアクセッサーsetCategoriesは個別のプロパティで渡すべき。
                                     setCards={setCards} //状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
                                     cards={cards}
-                                    className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
+                                    className="bg-[#ECDED5] w-[230px] max-h-[500px] overflow-y-auto rounded-md"
                                 />
                             </div>
                         ))}
@@ -348,21 +348,23 @@ const Board: FC = () => {
                 <button
                     onClick={openAddCategory}
                     className="
-                    ml-4
-                    h-[60px]
-                    rounded-lg p-2 
-                    bg-PoulOrange 
-                    cursor-pointer active:scale-95 focus:outline-none
-                    select-none
-                    hover:text-white hover:bg-opacity-50"
+                        ml-4 
+                        h-[60px] 
+                        w-auto min-w-[120px] 
+                        rounded-lg p-2 
+                        bg-PoulOrange 
+                        cursor-pointer active:scale-95 focus:outline-none 
+                        select-none 
+                        hover:text-white hover:bg-opacity-50 "
                 >
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                         <div className="w-6 h-6">
-                            <img src={"/add-icon.svg"} alt="Description" />
+                            <img src={"/add-icon.svg"} alt="追加" />
                         </div>
-                        カテゴリの追加
+                        <span className="whitespace-normal break-words">カテゴリの追加</span>
                     </div>
                 </button>
+
             </div>
             {isAddCategoryModal && (
                 <AddCategoryModal

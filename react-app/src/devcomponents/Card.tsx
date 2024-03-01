@@ -13,6 +13,8 @@ const Card: FC<CardProps> = ({
     className,
     setCards
 }) => {
+    const today = new Date().toISOString().split('T')[0];
+
     const deleteCard = (id: string | number) => {
         setCards((cards) => {
             return cards.filter((card) => card.id !== id);
@@ -25,15 +27,17 @@ const Card: FC<CardProps> = ({
                     <div className="flex justify-between items-center p-1">
                         <DraggableHandle
                             id={card.id}
-                            children={card.card_name}
-                            imgPath={"/drag-handle-corner-svgrepo-com.svg"}
-                        />
+                            imgPath={
+                                card.due_date &&
+                                (today >= card.due_date ?
+                                    "/exclamation-icon.svg" :
+                                    "/drag-handle-corner-svgrepo-com.svg")
+                            }
+                        >
+                            {card.card_name}
+                        </DraggableHandle>
                     </div>
-                    <button
-                        onClick={() => {
-                            deleteCard(card.id);
-                        }}
-                    >
+                    <button onClick={() => { deleteCard(card.id); }}                    >
                         <div className="w-5 h-5">
                             <img src={"/trash-icon.svg"} alt="Description" />
                         </div>
