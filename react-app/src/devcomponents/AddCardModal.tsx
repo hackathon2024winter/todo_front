@@ -89,10 +89,9 @@ const AddCardModal: FC<AddCardModalProps> = ({
                             </svg>
                         </button>
                     </div>
-                    <form onSubmit={handleSubmit(addCard)}>
-                        <div>
+                    <form onSubmit={handleSubmit(addCard)} className="flex flex-col items-center">
+                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
                             <label htmlFor="card_name" className="text-black">カード名</label>
-                            <br />
                             <input
                                 id="card_name"
                                 type="text"
@@ -101,9 +100,9 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                 })}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-400 focus:ring-2"
                             />
-                            {errors.card_name && <div className="text-black">{errors.card_name.message}</div>}
                         </div>
-                        <div>
+                        {errors.card_name && <div className="text-Warning">{errors.card_name.message}</div>}
+                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
                             <label htmlFor="description" className="text-black">カードの説明</label>
                             <input
                                 id="description"
@@ -112,8 +111,8 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-400 focus:ring-2"
                             />
                         </div>
-                        <div>
-                            <label htmlFor="due_date">カードの期限</label>
+                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
+                            <label htmlFor="due_date">期限の日付</label>
                             <input type="date"
                                 {...register("due_date", {
                                     // ここでカスタムバリデーションやルールを追加できます。
@@ -125,14 +124,15 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                 })}
                                 className="text-white border-gray-300"
                             />
-                            <p>選択された日付: {dueDateValue}</p>
                         </div>
-                        <div>
+                        {errors.due_date && <div className="text-Warning">{errors.due_date.message}</div>}
+                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
+                            <label htmlFor="color" className="text-black">カードの色</label>
                             <Controller
                                 control={control}
                                 name="color"
                                 rules={{
-                                    required: "Please Select State.",
+                                    required: "カードの色を選択してください",
                                 }}
                                 render={({ field: { onChange, onBlur, value, name, ref } }) => (
                                     <Select
@@ -145,7 +145,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                         onBlur={onBlur}
                                         value={options?.find((option) => option.value === value)}
                                         options={options}
-                                        placeholder="カードの色の入力"
+                                        placeholder="選択してください"
                                         isSearchable={false}
                                         components={{
                                             IndicatorSeparator: () => null
@@ -154,6 +154,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                 )}
                             />
                         </div>
+                        {errors.color && <div className="text-Warning">{errors.color.message}</div>}
                         <button
                             type="submit"
                             className="block ml-auto mr-auto m-2 rounded-lg bg-PoulBlue px-3 py-2 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-opacity-50 focus-visible:ring active:bg-gray-600 md:text-base"

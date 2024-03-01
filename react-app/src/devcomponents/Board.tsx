@@ -304,7 +304,7 @@ const Board: FC = () => {
                     onDragEnd={onDragEnd}
                     onDragMove={onDragMove}
                 >
-                    <div className=" flex flex-row gap-4">
+                    <div className=" flex flex-row gap-4 ml-[15px] mt-[75px]">
                         {categories.map((category) => (
                             <div key={category.id} className="">
                                 <Category
@@ -347,18 +347,10 @@ const Board: FC = () => {
                 </DndContext>
                 <button
                     onClick={openAddCategory}
-                    className="
-                        ml-4 
-                        h-[60px] 
-                        w-auto min-w-[120px] 
-                        rounded-lg p-2 
-                        bg-PoulOrange 
-                        cursor-pointer active:scale-95 focus:outline-none 
-                        select-none 
-                        hover:text-white hover:bg-opacity-50 "
+                    className="ml-4 h-[60px] w-auto min-w-[120px] rounded-lg p-2 bg-PoulOrange cursor-pointer active:scale-95 focus:outline-none select-none mt-[75px] hover:text-white hover:bg-opacity-50 "
                 >
                     <div className="flex justify-between items-center">
-                        <div className="w-6 h-6">
+                        <div className="w-6 h-6 ">
                             <img src={"/add-icon.svg"} alt="追加" />
                         </div>
                         <span className="whitespace-normal break-words">カテゴリの追加</span>

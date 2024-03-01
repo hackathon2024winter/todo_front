@@ -92,7 +92,7 @@ const Signup: FC = () => {
                   })}
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-PoulYellow transition duration-100 focus:ring"
                 />
-                {errors.username && <div>{errors.username.message}</div>}
+                {errors.username && <div className="text-Warning">{errors.username.message}</div>}
               </div>
 
               <div>
@@ -115,7 +115,7 @@ const Signup: FC = () => {
                   })}
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-PoulYellow transition duration-100 focus:ring"
                 />
-                {errors.email && <div>{errors.email.message}</div>}
+                {errors.email && <div className="text-Warning">{errors.email.message}</div>}
               </div>
 
               <div>
@@ -134,7 +134,7 @@ const Signup: FC = () => {
                   })}
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-PoulYellow transition duration-100 focus:ring"
                 />
-                {errors.password && <div>{errors.password.message}</div>}
+                {errors.password && <div className="text-Warning">{errors.password.message}</div>}
               </div>
 
               <div>
@@ -155,7 +155,7 @@ const Signup: FC = () => {
                   className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-PoulYellow transition duration-100 focus:ring"
                 />
                 {errors.passwordConfirm && (
-                  <div>{errors.passwordConfirm.message}</div>
+                  <div className="text-warning">{errors.passwordConfirm.message}</div>
                 )}
               </div>
 

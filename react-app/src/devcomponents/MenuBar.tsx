@@ -3,8 +3,8 @@ import TitleWhite from "../../public/title-icon-white.svg";
 
 const MenuBar: FC = () => {
   return (
-    <div className="bg-PoulBlue mb-5">
-      <div className="flex  justify-between items-center px-2 py-2 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-2">
+    <div className="bg-PoulBlue mb-5 fixed w-full h-[58px]">
+      <div className="flex  justify-between items-center px-2 py-2 mx-auto">
         <div className="flex items-center">
           <img
             src={TitleWhite}

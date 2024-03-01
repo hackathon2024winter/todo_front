@@ -74,9 +74,7 @@ const Category: FC<CategoryProps> = ({
                             <div className="mt-0.5 ml-1">
                                 カードの追加
                             </div>
-
                         </div>
-
                     </button>
 
                     <DraggableList<CardType>

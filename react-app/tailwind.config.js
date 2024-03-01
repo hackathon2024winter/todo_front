@@ -1,3 +1,5 @@
+import { Warning } from 'postcss';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
@@ -12,7 +14,8 @@ export default {
         PoulYellow: "#E9C77B",
         PoulBlue: "#99ABB9",
         PoulGray: "#F5F5F5",
-        PoulIndigo: "#183346"
+        PoulIndigo: "#183346",
+        Warning: "#E57637"
       },
     },
   },
