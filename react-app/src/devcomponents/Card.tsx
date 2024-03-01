@@ -34,7 +34,9 @@ const Card: FC<CardProps> = ({
                             deleteCard(card.id);
                         }}
                     >
-                        ✖️
+                        <div className="w-5 h-5">
+                            <img src={"/trash-icon.svg"} alt="Description" />
+                        </div>
                     </button>
                 </div>
             </DraggableItem>

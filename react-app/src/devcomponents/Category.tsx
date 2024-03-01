@@ -54,18 +54,29 @@ const Category: FC<CategoryProps> = ({
                         <DraggableHandle
                             id={category.id}
                             children={category.col_name}
-                            imgPath={"/drag-handle-dots-1-svgrepo-com.svg"}
+                            imgPath={"/drag-handle-corner-svgrepo-com.svg"}
                         />
                         <button
                             onClick={() => {
                                 deleteCategory(category.id);
                             }}
                         >
-                            ✖️
+                            <div className="w-6 h-6">
+                                <img src={"/trash-icon.svg"} alt="Description" />
+                            </div>
                         </button>
                     </div>
                     <button className="text-black text-sm" onClick={openAddCard}>
-                        ＋カードの追加
+                        <div className="flex justify-between">
+                            <div className="w-6 h-6">
+                                <img src={"/add-icon.svg"} alt="Description" />
+                            </div>
+                            <div className="mt-0.5 ml-1">
+                                カードの追加
+                            </div>
+
+                        </div>
+
                     </button>
 
                     <DraggableList<CardType>
