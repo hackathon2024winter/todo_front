@@ -6,7 +6,6 @@ import {
     DragStartEvent,
     KeyboardSensor,
     PointerSensor,
-    closestCenter,
     rectIntersection,
     useSensor,
     useSensors,
@@ -23,6 +22,7 @@ import Category from "./Category";
 import AddCategoryModal from "./AddCategoryModal";
 import Card from "./Card";
 import { BaseURL } from "../utilities/base_url";
+import MenuBar from "./MenuBar";
 
 const Board: FC = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
@@ -31,6 +31,8 @@ const Board: FC = () => {
     const [draggedCategory, setDraggedCategory] = useState<CategoryType | null>(
         null
     );
+    // カテゴリ追加の表示状態を管理するstate
+    const [isAddCategoryModal, setAddCategoryModal] = useState(false);
 
     // ドラッグ&ドロップする時に許可する入力
     const sensors = useSensors(
@@ -39,9 +41,6 @@ const Board: FC = () => {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-
-    // カテゴリ追加の表示状態を管理するstate
-    const [isAddCategoryModal, setAddCategoryModal] = useState(false);
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -161,9 +160,13 @@ const Board: FC = () => {
 
             switch (activePrefix) {
                 case "card": {
-                    const activeCardIndex = cards.findIndex((card) => card.id === active.id);
+                    const activeCardIndex = cards.findIndex(
+                        (card) => card.id === active.id
+                    );
                     if (overPrefix === "card") {
-                        const overCardIndex = cards.findIndex((card) => card.id === over?.id);
+                        const overCardIndex = cards.findIndex(
+                            (card) => card.id === over?.id
+                        );
 
                         // Categoryを跨ぐ・跨がないに関わらず、activeをoverのcol_idに変更
                         if (activeCardIndex !== -1 && overCardIndex !== -1) {
@@ -175,7 +178,11 @@ const Board: FC = () => {
                                 return card;
                             });
                             // カードの順番を更新
-                            const reorderedCards = arrayMove(newCards, activeCardIndex, overCardIndex);
+                            const reorderedCards = arrayMove(
+                                newCards,
+                                activeCardIndex,
+                                overCardIndex
+                            );
 
                             // ステートを更新
                             setCards(reorderedCards);
@@ -193,7 +200,11 @@ const Board: FC = () => {
                             });
 
                             // ここでエラーが発生していた reorderedCards の定義と使用を修正
-                            const reorderedCards = arrayMove(updatedCards, activeCardIndex, updatedCards.length);
+                            const reorderedCards = arrayMove(
+                                updatedCards,
+                                activeCardIndex,
+                                updatedCards.length
+                            );
 
                             // ステートを更新
                             setCards(reorderedCards);
@@ -242,9 +253,9 @@ const Board: FC = () => {
                     const activeCard = cards.find((card) => card.id === active.id);
                     if (activeCard) {
                         console.log(
-                            `Move: ${activeCard.id
+                            `Move: ${activeCard.id.toString().slice(0, 15)} Over: ${over?.id
                                 .toString()
-                                .slice(0, 15)} Over: ${over?.id.toString().slice(0, 15)}`
+                                .slice(0, 15)}`
                         );
                     }
                     break;
@@ -282,8 +293,9 @@ const Board: FC = () => {
     };
 
     return (
-        <>
-            <div className=" m-auto flex flex-row gap-4">
+        <div className="bg-PoulGray h-full">
+            <MenuBar />
+            <div className=" m-auto flex flex-row bg-PoulGray">
                 <DndContext
                     sensors={sensors}
                     collisionDetection={rectIntersection}
@@ -304,6 +316,7 @@ const Board: FC = () => {
                             </div>
                         ))}
                     </div>
+
                     <DragOverlay>
                         {draggedCategory ? (
                             <Category
@@ -329,10 +342,28 @@ const Board: FC = () => {
                 <button
                     onClick={openAddCategory}
                     className="
-                        h-[60px] border-2 rounded-lg p-2 bg-[#ECDED5] border-orange-400 
-                        cursor-pointer shadow-custom active:shadow-none active:scale-95 
-                        focus:outline-none  select-none"
+                    ml-4
+                    h-[60px]
+                    rounded-lg p-2 
+                    bg-PoulOrange 
+                    cursor-pointer active:scale-95 focus:outline-none
+                    select-none
+                    hover:text-white hover:bg-opacity-50"
                 >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 black-500"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                    </svg>
                     カテゴリの追加
                 </button>
             </div>
@@ -342,7 +373,7 @@ const Board: FC = () => {
                     setCategories={setCategories}
                 />
             )}
-        </>
+        </div>
     );
 };
 

@@ -52,3 +52,8 @@ export type SignupForm = {
 export type CardFormType = {
     inputData: string,
 }
+
+export type CategoryFormType = {
+    col_name: string,
+    description: string;
+}
