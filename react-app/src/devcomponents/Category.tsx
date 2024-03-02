@@ -15,20 +15,24 @@ interface CategoryProps {
     setCategories: (
         updateFunc: (categories: CategoryType[]) => CategoryType[]
     ) => void;
+    categories: CategoryType[];
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
     cards: CardType[];
     setAddCard: (card: CardType) => void;
     setDelCard: (cards: CardType) => void;
+    setDelCategory: (category: CategoryType) => void;
 }
 
 const Category: FC<CategoryProps> = ({
     category,
     className,
     setCategories,
+    categories,
     setCards,
     cards,
     setAddCard,
-    setDelCard
+    setDelCard,
+    setDelCategory
 }) => {
 
     // カテゴリ追加の表示状態を管理するstate
@@ -48,6 +52,11 @@ const Category: FC<CategoryProps> = ({
         setCategories((categories) => {
             return categories.filter((category) => category.id !== id);
         });
+
+        const delCategory = categories.find((category) => category.id === id);
+        if (delCategory) {
+            setDelCategory(delCategory);
+        }
     };
 
     return (

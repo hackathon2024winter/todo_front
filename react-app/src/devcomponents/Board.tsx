@@ -42,6 +42,8 @@ const Board: FC = () => {
     const [addCard, setAddCard] = useState<CardType | null>(null);
     // cardが削除されたかを管理するstate
     const [delCard, setDelCard] = useState<CardType | null>(null);
+    // categoryが削除されたかを管理するstate
+    const [delCategory, setDelCategory] = useState<CategoryType | null>(null);
 
     // ドラッグ&ドロップする時に許可する入力
     const sensors = useSensors(
@@ -315,6 +317,35 @@ const Board: FC = () => {
         fetchData(); // 定義した非同期関数を呼び出し
     }, [delCard]);
 
+    useEffect(() => {
+        // 非同期処理を行うための内部関数を定義
+        const fetchData = async () => {
+            if (delCategory) {
+                try {
+                    const response = await fetch(`${BaseURL()}/delcategory`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            col_id: delCategory.id,
+                        }),
+                    });
+
+                    const responseData = await response.json(); // レスポンスのJSONを解析
+                    if (response.ok) {
+                        // console.log(`${addCard?.card_name}の追加成功`);
+                    } else {
+                        console.log(responseData.detail);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+        fetchData(); // 定義した非同期関数を呼び出し
+    }, [delCategory]);
+
     // Drag中のマウスに追随させるコンポーネントの表示フラグ
     const onDragStart = useCallback(
         (e: DragStartEvent) => {
@@ -546,6 +577,8 @@ const Board: FC = () => {
                                     cards={cards}
                                     setAddCard={setAddCard}
                                     setDelCard={setDelCard}
+                                    categories={categories}
+                                    setDelCategory={setDelCategory}
                                     className="bg-[#ECDED5] w-[230px] max-h-[500px] overflow-y-auto rounded-md"
                                 />
                             </div>
@@ -561,6 +594,8 @@ const Board: FC = () => {
                                 cards={cards}
                                 setAddCard={setAddCard}
                                 setDelCard={setDelCard}
+                                categories={categories}
+                                setDelCategory={setDelCategory}
                                 className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
                             />
                         ) : null}
@@ -588,7 +623,8 @@ const Board: FC = () => {
                                 )}
                                 setCards={setCards}
                                 cards={cards}
-                                setDelCard={setDelCard} />
+                                setDelCard={setDelCard}
+                            />
                         ) : null}
                     </DragOverlay>
                 </DndContext>
