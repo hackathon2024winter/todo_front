@@ -1,6 +1,7 @@
-import { FC } from "react"
+import { FC, useState } from "react"
 import { CardType } from "../utilities/ttypes";
 import { DraggableHandle, DraggableItem } from "./DraggableComponents";
+import EditCardModal from "./EditCardModal";
 
 interface CardProps {
     card: CardType;
@@ -13,6 +14,10 @@ const Card: FC<CardProps> = ({
     className,
     setCards
 }) => {
+
+    // カテゴリ追加の表示状態を管理するstate
+    const [isEditCardModal, setEditCardModal] = useState(false);
+
     const today = new Date().toISOString().split('T')[0];
 
     const deleteCard = (id: string | number) => {
@@ -20,10 +25,22 @@ const Card: FC<CardProps> = ({
             return cards.filter((card) => card.id !== id);
         });
     };
+
+
+    // カテゴリ追加を開く関数
+    const openEditCard = () => {
+        setEditCardModal(true);
+    };
+
+    // カテゴリ追加を閉じる関数
+    const closeEditCard = () => {
+        setEditCardModal(false);
+    };
+
     return (
         <>
             <DraggableItem id={card.id}>
-                <div className={className}>
+                <div className={className} onClick={openEditCard}>
                     <div className="flex justify-between items-center p-1">
                         <DraggableHandle
                             id={card.id}
@@ -44,13 +61,13 @@ const Card: FC<CardProps> = ({
                     </button>
                 </div>
             </DraggableItem>
-            {/* {isAddCardModal && (
-                <AddCardModal
-                    categoryId={category.id}
-                    closeAddCard={closeAddCard}
+            {isEditCardModal && (
+                <EditCardModal
+                    card={card}
+                    closeEditCard={closeEditCard}
                     setCards={setCards}
                 />
-            )} */}
+            )}
         </>
     );
 }

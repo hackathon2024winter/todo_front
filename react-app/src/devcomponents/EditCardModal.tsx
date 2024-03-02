@@ -1,67 +1,106 @@
-import { FC } from "react";
-import { v4 as uuid } from "uuid";
-import { CardFormType, CardType, CardColorForm } from "../utilities/ttypes"
-import { Controller, useForm } from "react-hook-form";
+import { FC, useEffect } from "react";
+import { CardColorForm, CardFormType, CardType } from "../utilities/ttypes";
 import Select, { StylesConfig } from "react-select";
+import { Controller, useForm } from "react-hook-form";
 
-interface AddCardModalProps {
-    categoryId: string
+interface EditCardModalProps {
+    card: CardType;
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
-    closeAddCard: () => void;
+    closeEditCard: () => void;
 }
 
-const AddCardModal: FC<AddCardModalProps> = ({
-    categoryId,
+const EditCardModal: FC<EditCardModalProps> = ({
+    card,
     setCards,
-    closeAddCard
+    closeEditCard,
 }) => {
 
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const options: Array<CardColorForm> = [
-        { value: "red", label: "赤", primaryColor: "#E39C74", secondaryColor: "#FaDCD0" },
-        { value: "blue", label: "青", primaryColor: "#97BDD3", secondaryColor: "#D3ECF3" },
-        { value: "yellow", label: "黄", primaryColor: "#E2B856", secondaryColor: "#FAE9C2" }
-    ]
+        {
+            value: "red",
+            label: "赤",
+            primaryColor: "#E39C74",
+            secondaryColor: "#FaDCD0",
+        },
+        {
+            value: "blue",
+            label: "青",
+            primaryColor: "#97BDD3",
+            secondaryColor: "#D3ECF3",
+        },
+        {
+            value: "yellow",
+            label: "黄",
+            primaryColor: "#E2B856",
+            secondaryColor: "#FAE9C2",
+        },
+    ];
 
     const colorStyles: StylesConfig<CardColorForm> = {
         control: (styles) => ({
             ...styles,
-            backgroundColor: 'white',
-            borderRadius: '7px',
-            border: '1px solid gray',
+            backgroundColor: "white",
+            borderRadius: "7px",
+            border: "1px solid gray",
         }),
         option: (style, { data, isFocused, isSelected }) => {
             return {
                 ...style,
-                backgroundColor: isSelected ? data.primaryColor : isFocused ? data.secondaryColor : "#FFFFFF",
+                backgroundColor: isSelected
+                    ? data.primaryColor
+                    : isFocused
+                        ? data.secondaryColor
+                        : "#FFFFFF",
                 color: isSelected ? "#FFFFFF" : data.primaryColor,
 
-                ':active': {
-                    ...style[':active'],
+                ":active": {
+                    ...style[":active"],
                     backgroundColor: isSelected ? data.primaryColor : data.secondaryColor,
-                }
+                },
             };
-        }
+        },
     };
 
-    const { register, handleSubmit, watch, reset, formState: { errors, }, control, } = useForm<CardFormType>();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        formState: { errors },
+        control,
+    } = useForm<CardFormType>({
+        defaultValues: {
+            card_name: card.card_name,
+            description: card.description,
+            due_date: card.due_date,
+            color: card.color,
+        }
+    });
+
+    useEffect(() => {
+        // カードの色に対応するオプションを探す
+        const colorOption = options.find(o => o.value === card.color);
+
+        // 対応するオプションが見つかった場合のみ setValue を呼び出す
+        if (colorOption) {
+            setValue('color', colorOption.value);
+        }
+    }, [card.color, options, setValue]);
+
     const dueDateValue = watch("due_date");
 
-    const addCard = (data: CardFormType) => {
-        closeAddCard();
-        reset();
-        setCards((currentCards) => [
-            ...currentCards,
-            {
-                id: "card-" + uuid(),
-                card_pos: currentCards.length,
-                col_id: categoryId,
-                card_name: data.card_name,
-                input_date: "string",
-                due_date: data.due_date,
-                color: data.color,
-                description: data.description,
-            },
-        ]);
+    const editCard = (data: CardFormType) => {
+        setCards((currentCards) => currentCards.map((c) => {
+            if (c.id === card.id) {
+
+                return { ...c, ...data };
+            } else {
+                return c;
+            }
+        }));
+        closeEditCard();
     };
 
     return (
@@ -70,9 +109,9 @@ const AddCardModal: FC<AddCardModalProps> = ({
                 <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
                     <div className="flex justify-between mb-3">
                         <div className="text-black text-lg text-center grow ">
-                            カードの追加
+                            カードの編集
                         </div>
-                        <button onClick={closeAddCard} className="">
+                        <button onClick={closeEditCard} className="">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -89,9 +128,12 @@ const AddCardModal: FC<AddCardModalProps> = ({
                             </svg>
                         </button>
                     </div>
-                    <form onSubmit={handleSubmit(addCard)} className="flex flex-col items-center">
-                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
-                            <label htmlFor="card_name" className="text-black">カード名</label>
+                    <form onSubmit={handleSubmit(editCard)}>
+                        <div>
+                            <label htmlFor="card_name" className="text-black">
+                                カード名
+                            </label>
+                            <br />
                             <input
                                 id="card_name"
                                 type="text"
@@ -100,10 +142,14 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                 })}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-400 focus:ring-2"
                             />
+                            {errors.card_name && (
+                                <div className="text-black">{errors.card_name.message}</div>
+                            )}
                         </div>
-                        {errors.card_name && <div className="text-Warning">{errors.card_name.message}</div>}
-                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
-                            <label htmlFor="description" className="text-black">カードの説明</label>
+                        <div>
+                            <label htmlFor="description" className="text-black">
+                                カードの説明
+                            </label>
                             <input
                                 id="description"
                                 type="text"
@@ -111,28 +157,24 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-400 focus:ring-2"
                             />
                         </div>
-                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
-                            <label htmlFor="due_date">期限の日付</label>
-                            <input type="date"
+                        <div>
+                            <label htmlFor="due_date">カードの期限</label>
+                            <input
+                                type="date"
                                 {...register("due_date", {
                                     // ここでカスタムバリデーションやルールを追加できます。
                                     required: "期限日は必須です",
-                                    // onChange: (e) => {  // ここにカスタムの onChange ロジックを追加する
-                                    //     // e.target.value には選択された日付が 'YYYY-MM-DD' 形式で含まれています。
-                                    //     console.log(e.target.value);
-                                    // }
                                 })}
                                 className="text-white border-gray-300"
                             />
+                            <p>選択された日付: {dueDateValue === "" ? card.due_date : dueDateValue}</p>
                         </div>
-                        {errors.due_date && <div className="text-Warning">{errors.due_date.message}</div>}
-                        <div className="flex flex-row items-center justify-between w-full px-[17px] mt-[5px]">
-                            <label htmlFor="color" className="text-black">カードの色</label>
+                        <div>
                             <Controller
                                 control={control}
                                 name="color"
                                 rules={{
-                                    required: "カードの色を選択してください",
+                                    required: "Please Select State.",
                                 }}
                                 render={({ field: { onChange, onBlur, value, name, ref } }) => (
                                     <Select
@@ -145,16 +187,15 @@ const AddCardModal: FC<AddCardModalProps> = ({
                                         onBlur={onBlur}
                                         value={options?.find((option) => option.value === value)}
                                         options={options}
-                                        placeholder="選択してください"
+                                        placeholder="カードの色の入力"
                                         isSearchable={false}
                                         components={{
-                                            IndicatorSeparator: () => null
+                                            IndicatorSeparator: () => null,
                                         }}
                                     />
                                 )}
                             />
                         </div>
-                        {errors.color && <div className="text-Warning">{errors.color.message}</div>}
                         <button
                             type="submit"
                             className="block ml-auto mr-auto m-2 rounded-lg bg-PoulBlue px-3 py-2 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-opacity-50 focus-visible:ring active:bg-gray-600 md:text-base"
@@ -168,4 +209,4 @@ const AddCardModal: FC<AddCardModalProps> = ({
     );
 };
 
-export default AddCardModal
+export default EditCardModal;
