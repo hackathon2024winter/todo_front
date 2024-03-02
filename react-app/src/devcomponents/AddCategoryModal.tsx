@@ -7,12 +7,16 @@ export interface AddCategoryModalProps {
     setCategories: (
         updateFunc: (categories: CategoryType[]) => CategoryType[]
     ) => void;
+    categories: CategoryType[]
     closeAddCategory: () => void;
+    setAddCategory: (category: CategoryType) => void;
 }
 
 const AddCategoryModal: FC<AddCategoryModalProps> = ({
     setCategories,
+    categories,
     closeAddCategory,
+    setAddCategory
 }) => {
     const {
         register,
@@ -21,15 +25,17 @@ const AddCategoryModal: FC<AddCategoryModalProps> = ({
     } = useForm<CategoryFormType>();
 
     const addCategory = (data: CategoryFormType) => {
-        setCategories((currentCategories) => [
-            ...currentCategories,
-            {
-                id: "category-" + uuid(),
-                col_pos: currentCategories.length,
-                col_name: data.col_name,
-                description: "",
-            },
-        ]);
+
+        const newCategory: CategoryType = {
+            id: "category-" + uuid(),
+            col_pos: categories.length,
+            col_name: data.col_name,
+            description: data.description,
+        }
+
+        setCategories((currentCategories) => [...currentCategories, newCategory]);
+        setAddCategory(newCategory)
+
         closeAddCategory();
     };
 
@@ -77,6 +83,7 @@ const AddCategoryModal: FC<AddCategoryModalProps> = ({
                                 id="description"
                                 type="text"
                                 placeholder="カテゴリの説明 (任意)"
+                                {...register("description")}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-md px-3 py-1 focus:ring-gray-500 focus:ring-2"
                                 style={{ width: '300px' }}
                             />

@@ -43,8 +43,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
         }
     };
 
-    const { register, handleSubmit, watch, reset, formState: { errors, }, control, } = useForm<CardFormType>();
-    const dueDateValue = watch("due_date");
+    const { register, handleSubmit, reset, formState: { errors, }, control, } = useForm<CardFormType>();
 
     const addCard = (data: CardFormType) => {
         closeAddCard();

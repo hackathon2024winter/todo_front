@@ -34,8 +34,10 @@ const Board: FC = () => {
     );
     // カテゴリ追加の表示状態を管理するstate
     const [isAddCategoryModal, setAddCategoryModal] = useState(false);
-    // categories cardsが更新されたかを管理するstate ここでfetchを飛ばす。
+    // categories cardsが更新されたかを管理するstate
     const [isUpdated, setIsUpdated] = useState(false);
+    // categoryが追加されたかを管理するstate
+    const [addCategory, setAddCategory] = useState<CategoryType | null>(null);
 
     // ドラッグ&ドロップする時に許可する入力
     const sensors = useSensors(
@@ -127,7 +129,6 @@ const Board: FC = () => {
         fetchCard();
     }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
 
-
     // categoryが更新されたら並び替え
     useEffect(() => {
         categories.forEach((category, index) => {
@@ -141,6 +142,7 @@ const Board: FC = () => {
         });
     }, [cards]);
 
+    // isUpdateが変化したらupdateのfetch
     useEffect(() => {
         // console.log("以下でfetch投げる");
         categories.forEach(async (category) => {
@@ -203,6 +205,39 @@ const Board: FC = () => {
             }
         });
     }, [cards, categories, isUpdated]);
+
+    useEffect(() => {
+        // 非同期処理を行うための内部関数を定義
+        const fetchData = async () => {
+            if (addCategory) {
+                const newCat: CategoryFetchType = {
+                    col_id: addCategory.id,
+                    col_pos: addCategory.col_pos,
+                    col_name: addCategory.col_name,
+                    description: addCategory.description,
+                };
+                try {
+                    const response = await fetch(`${BaseURL()}/addcategory`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(newCat),
+                    });
+
+                    const responseData = await response.json(); // レスポンスのJSONを解析
+                    if (response.ok) {
+                        console.log(`${addCategory?.col_name}の追加成功`);
+                    } else {
+                        console.log(responseData.detail);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+        fetchData(); // 定義した非同期関数を呼び出し
+    }, [addCategory]);
 
     // Drag中のマウスに追随させるコンポーネントの表示フラグ
     const onDragStart = useCallback(
@@ -472,6 +507,8 @@ const Board: FC = () => {
                 <AddCategoryModal
                     closeAddCategory={closeAddCategory}
                     setCategories={setCategories}
+                    categories={categories}
+                    setAddCategory={setAddCategory}
                 />
             )}
         </div>
