@@ -32,9 +32,8 @@ const Category: FC<CategoryProps> = ({
     cards,
     setAddCard,
     setDelCard,
-    setDelCategory
+    setDelCategory,
 }) => {
-
     // カテゴリ追加の表示状態を管理するstate
     const [isAddCardModal, setAddCardModal] = useState(false);
 
@@ -84,9 +83,7 @@ const Category: FC<CategoryProps> = ({
                             <div className="w-6 h-6">
                                 <img src={"/add-icon.svg"} alt="Description" />
                             </div>
-                            <div className="mt-0.5 ml-1">
-                                カードの追加
-                            </div>
+                            <div className="mt-0.5 ml-1">カードの追加</div>
                         </div>
                     </button>
 
@@ -95,23 +92,37 @@ const Category: FC<CategoryProps> = ({
                         layout="grid"
                     >
                         <div className=" gap-4">
-                            {cards.map((card) => (
-                                card.col_id === category.id && (
-                                    <div key={card.id} className="">
-                                        <Card
-                                            card={card}
-                                            className={classnames("my-2", "mx-1", "py-2", "bg-[#F0EFEE]", "flex", "flex-row",
-                                                "justify-between", "items-center", "rounded-sm",
-                                                card.color === "red" ? "border-l-[18px] border-solid border-PoulRed" :
-                                                    card.color === "blue" ? "border-l-[18px] border-solid border-PoulBlue" :
-                                                        card.color === "yellow" ? "border-l-[18px] border-solid border-PoulYellow" :
-                                                            "bg-white")}
-                                            setCards={setCards}
-                                            cards={cards}
-                                            setDelCard={setDelCard} />
-                                    </div>
-                                )
-                            ))}
+                            {cards.map(
+                                (card) =>
+                                    card.col_id === category.id && (
+                                        <div key={card.id} className="">
+                                            <Card
+                                                card={card}
+                                                className={classnames(
+                                                    "my-2",
+                                                    "mx-1",
+                                                    "py-2",
+                                                    "bg-[#F0EFEE]",
+                                                    "flex",
+                                                    "flex-row",
+                                                    "justify-between",
+                                                    "items-center",
+                                                    "rounded-sm",
+                                                    card.color === "red"
+                                                        ? "border-l-[18px] border-solid border-PoulRed"
+                                                        : card.color === "blue"
+                                                            ? "border-l-[18px] border-solid border-PoulBlue"
+                                                            : card.color === "yellow"
+                                                                ? "border-l-[18px] border-solid border-PoulYellow"
+                                                                : "bg-white"
+                                                )}
+                                                setCards={setCards}
+                                                cards={cards}
+                                                setDelCard={setDelCard}
+                                            />
+                                        </div>
+                                    )
+                            )}
                         </div>
                     </DraggableList>
                 </div>
@@ -120,8 +131,10 @@ const Category: FC<CategoryProps> = ({
                 <AddCardModal
                     categoryId={category.id}
                     closeAddCard={closeAddCard}
-                    setCards={setCards} cards={[]}
-                    setAddCard={setAddCard} />
+                    setCards={setCards}
+                    cards={[]}
+                    setAddCard={setAddCard}
+                />
             )}
         </>
     );
