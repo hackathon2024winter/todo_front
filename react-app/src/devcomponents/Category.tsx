@@ -18,6 +18,7 @@ interface CategoryProps {
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
     cards: CardType[];
     setAddCard: (card: CardType) => void;
+    setDelCard: (cards: CardType) => void;
 }
 
 const Category: FC<CategoryProps> = ({
@@ -26,7 +27,8 @@ const Category: FC<CategoryProps> = ({
     setCategories,
     setCards,
     cards,
-    setAddCard
+    setAddCard,
+    setDelCard
 }) => {
 
     // カテゴリ追加の表示状態を管理するstate
@@ -89,16 +91,15 @@ const Category: FC<CategoryProps> = ({
                                     <div key={card.id} className="">
                                         <Card
                                             card={card}
-                                            className={
-                                                classnames("my-2", "mx-1", "py-2", "bg-[#F0EFEE]", "flex", "flex-row",
-                                                    "justify-between", "items-center", "rounded-sm",
-                                                    card.color === "red" ? "border-l-[18px] border-solid border-PoulRed" :
-                                                        card.color === "blue" ? "border-l-[18px] border-solid border-PoulBlue" :
-                                                            card.color === "yellow" ? "border-l-[18px] border-solid border-PoulYellow" :
-                                                                "bg-white")
-                                            }
+                                            className={classnames("my-2", "mx-1", "py-2", "bg-[#F0EFEE]", "flex", "flex-row",
+                                                "justify-between", "items-center", "rounded-sm",
+                                                card.color === "red" ? "border-l-[18px] border-solid border-PoulRed" :
+                                                    card.color === "blue" ? "border-l-[18px] border-solid border-PoulBlue" :
+                                                        card.color === "yellow" ? "border-l-[18px] border-solid border-PoulYellow" :
+                                                            "bg-white")}
                                             setCards={setCards}
-                                        />
+                                            cards={cards}
+                                            setDelCard={setDelCard} />
                                     </div>
                                 )
                             ))}

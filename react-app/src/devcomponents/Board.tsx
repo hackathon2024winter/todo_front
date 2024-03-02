@@ -40,6 +40,8 @@ const Board: FC = () => {
     const [addCategory, setAddCategory] = useState<CategoryType | null>(null);
     // cardが追加されたかを管理するstate
     const [addCard, setAddCard] = useState<CardType | null>(null);
+    // cardが削除されたかを管理するstate
+    const [delCard, setDelCard] = useState<CardType | null>(null);
 
     // ドラッグ&ドロップする時に許可する入力
     const sensors = useSensors(
@@ -284,6 +286,35 @@ const Board: FC = () => {
         fetchData(); // 定義した非同期関数を呼び出し
     }, [addCard]);
 
+    useEffect(() => {
+        // 非同期処理を行うための内部関数を定義
+        const fetchData = async () => {
+            if (delCard) {
+                try {
+                    const response = await fetch(`${BaseURL()}/delcard`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            card_id: delCard.id,
+                        }),
+                    });
+
+                    const responseData = await response.json(); // レスポンスのJSONを解析
+                    if (response.ok) {
+                        // console.log(`${addCard?.card_name}の追加成功`);
+                    } else {
+                        console.log(responseData.detail);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+        fetchData(); // 定義した非同期関数を呼び出し
+    }, [delCard]);
+
     // Drag中のマウスに追随させるコンポーネントの表示フラグ
     const onDragStart = useCallback(
         (e: DragStartEvent) => {
@@ -324,16 +355,14 @@ const Board: FC = () => {
                         (card) => card.id === active.id
                     );
                     if (overPrefix === "card") {
-
                         // Categoryを跨ぐ・跨がないに関わらず、activeをoverのcol_idに変更
                         const overCardIndex = cards.findIndex(
                             (card) => card.id === over?.id
                         );
 
                         // undefinedの処理が面倒なので、ここで弾く
-                        const colId = over ? cards[overCardIndex].col_id : ""
+                        const colId = over ? cards[overCardIndex].col_id : "";
                         if (activeCardIndex !== -1 && colId !== "") {
-
                             // 新しいカード配列を作成する。元の配列は変更しない。
                             const updatedCards = cards.map((card, index) => {
                                 if (index === activeCardIndex) {
@@ -372,7 +401,6 @@ const Board: FC = () => {
                         // // ステートを更新
                         // setCards(reorderedCards);
                         // setIsUpdated(true);
-
                     } else if (overPrefix === "category") {
                         const overCategoryId = over?.id.toString(); // ドロップ先のカテゴリIDをstring型に変換
                         if (activeCardIndex !== -1 && overCategoryId) {
@@ -516,8 +544,9 @@ const Board: FC = () => {
                                     setCategories={setCategories} //状態categoriesとそのアクセッサーsetCategoriesは個別のプロパティで渡すべき。
                                     setCards={setCards} //状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
                                     cards={cards}
-                                    className="bg-[#ECDED5] w-[230px] max-h-[500px] overflow-y-auto rounded-md"
                                     setAddCard={setAddCard}
+                                    setDelCard={setDelCard}
+                                    className="bg-[#ECDED5] w-[230px] max-h-[500px] overflow-y-auto rounded-md"
                                 />
                             </div>
                         ))}
@@ -530,8 +559,9 @@ const Board: FC = () => {
                                 setCategories={setCategories}
                                 setCards={setCards}
                                 cards={cards}
-                                className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
                                 setAddCard={setAddCard}
+                                setDelCard={setDelCard}
+                                className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
                             />
                         ) : null}
 
@@ -557,7 +587,8 @@ const Board: FC = () => {
                                                 : "bg-white"
                                 )}
                                 setCards={setCards}
-                            />
+                                cards={cards}
+                                setDelCard={setDelCard} />
                         ) : null}
                     </DragOverlay>
                 </DndContext>
