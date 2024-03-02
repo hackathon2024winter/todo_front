@@ -7,13 +7,17 @@ import Select, { StylesConfig } from "react-select";
 interface AddCardModalProps {
     categoryId: string
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
+    cards: CardType[]
     closeAddCard: () => void;
+    setAddCard: (card: CardType) => void;
 }
 
 const AddCardModal: FC<AddCardModalProps> = ({
     categoryId,
     setCards,
-    closeAddCard
+    cards,
+    closeAddCard,
+    setAddCard
 }) => {
 
     const options: Array<CardColorForm> = [
@@ -48,19 +52,20 @@ const AddCardModal: FC<AddCardModalProps> = ({
     const addCard = (data: CardFormType) => {
         closeAddCard();
         reset();
-        setCards((currentCards) => [
-            ...currentCards,
-            {
-                id: "card-" + uuid(),
-                card_pos: currentCards.length,
-                col_id: categoryId,
-                card_name: data.card_name,
-                input_date: "string",
-                due_date: data.due_date,
-                color: data.color,
-                description: data.description,
-            },
-        ]);
+
+        const newCard: CardType = {
+            id: "card-" + uuid(),
+            card_pos: cards.length,
+            col_id: categoryId,
+            card_name: data.card_name,
+            input_date: new Date().toISOString().split("T")[0],
+            due_date: data.due_date,
+            color: data.color,
+            description: data.description,
+        }
+
+        setCards((currentCards) => [...currentCards, newCard]);
+        setAddCard(newCard);
     };
 
     return (
