@@ -38,6 +38,8 @@ const Board: FC = () => {
     const [isUpdated, setIsUpdated] = useState(false);
     // categoryが追加されたかを管理するstate
     const [addCategory, setAddCategory] = useState<CategoryType | null>(null);
+    // cardが追加されたかを管理するstate
+    const [addCard, setAddCard] = useState<CardType | null>(null);
 
     // ドラッグ&ドロップする時に許可する入力
     const sensors = useSensors(
@@ -144,66 +146,72 @@ const Board: FC = () => {
 
     // isUpdateが変化したらupdateのfetch
     useEffect(() => {
-        // console.log("以下でfetch投げる");
-        categories.forEach(async (category) => {
-            const categoryInfo: CategoryFetchType = {
-                col_id: category.id,
-                col_pos: category.col_pos,
-                col_name: category.col_name,
-                description: category.description,
-            };
+        if (isUpdated) {
+            // cards.map((card) => {
+            //     console.log(`Card:${card.card_name} Col:${card.col_id} Pos:${card.card_pos} `)
+            // })
 
-            try {
-                const response = await fetch(`${BaseURL()}/updatecategory`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(categoryInfo),
-                });
+            // console.log("以下でfetch投げる");
+            categories.forEach(async (category) => {
+                const categoryInfo: CategoryFetchType = {
+                    col_id: category.id,
+                    col_pos: category.col_pos,
+                    col_name: category.col_name,
+                    description: category.description,
+                };
 
-                const responseData = await response.json(); // レスポンスのJSONを解析
-                if (response.ok) {
-                    console.log(`${category.col_name}の更新成功`);
-                } else {
-                    console.log(responseData.detail);
+                try {
+                    const response = await fetch(`${BaseURL()}/updatecategory`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(categoryInfo),
+                    });
+
+                    const responseData = await response.json(); // レスポンスのJSONを解析
+                    if (response.ok) {
+                        // console.log(`${category.col_name}の更新成功`);
+                    } else {
+                        console.log(responseData.detail);
+                    }
+                } catch (error) {
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
-            }
-        });
+            });
 
-        cards.forEach(async (card) => {
-            const cardInfo: CardFetchType = {
-                card_id: card.id,
-                card_pos: card.card_pos,
-                col_id: card.col_id,
-                card_name: card.card_name,
-                input_date: new Date().toISOString().split("T")[0],
-                due_date: card.due_date,
-                color: card.color,
-                description: card.description,
-            };
+            cards.forEach(async (card) => {
+                const cardInfo: CardFetchType = {
+                    card_id: card.id,
+                    card_pos: card.card_pos,
+                    col_id: card.col_id,
+                    card_name: card.card_name,
+                    input_date: new Date().toISOString().split("T")[0],
+                    due_date: card.due_date,
+                    color: card.color,
+                    description: card.description,
+                };
 
-            try {
-                const response = await fetch(`${BaseURL()}/updatecard`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(cardInfo),
-                });
+                try {
+                    const response = await fetch(`${BaseURL()}/updatecard`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(cardInfo),
+                    });
 
-                const responseData = await response.json(); // レスポンスのJSONを解析
-                if (response.ok) {
-                    console.log(`${card.card_name}の更新成功`);
-                } else {
-                    console.log(responseData.detail);
+                    const responseData = await response.json(); // レスポンスのJSONを解析
+                    if (response.ok) {
+                        // console.log(`${card.card_name}の更新成功`);
+                    } else {
+                        console.log(responseData.detail);
+                    }
+                } catch (error) {
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
-            }
-        });
+            });
+        }
     }, [cards, categories, isUpdated]);
 
     useEffect(() => {
@@ -227,7 +235,7 @@ const Board: FC = () => {
 
                     const responseData = await response.json(); // レスポンスのJSONを解析
                     if (response.ok) {
-                        console.log(`${addCategory?.col_name}の追加成功`);
+                        // console.log(`${addCategory?.col_name}の追加成功`);
                     } else {
                         console.log(responseData.detail);
                     }
@@ -238,6 +246,43 @@ const Board: FC = () => {
         };
         fetchData(); // 定義した非同期関数を呼び出し
     }, [addCategory]);
+
+    useEffect(() => {
+        // 非同期処理を行うための内部関数を定義
+        const fetchData = async () => {
+            if (addCard) {
+                const newCard: CardFetchType = {
+                    card_id: addCard.id,
+                    card_pos: addCard.card_pos,
+                    col_id: addCard.col_id,
+                    card_name: addCard.card_name,
+                    input_date: addCard.input_date,
+                    due_date: addCard.due_date,
+                    color: addCard.color,
+                    description: addCard.description,
+                };
+                try {
+                    const response = await fetch(`${BaseURL()}/addcard`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(newCard),
+                    });
+
+                    const responseData = await response.json(); // レスポンスのJSONを解析
+                    if (response.ok) {
+                        // console.log(`${addCard?.card_name}の追加成功`);
+                    } else {
+                        console.log(responseData.detail);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+        fetchData(); // 定義した非同期関数を呼び出し
+    }, [addCard]);
 
     // Drag中のマウスに追随させるコンポーネントの表示フラグ
     const onDragStart = useCallback(
@@ -279,30 +324,55 @@ const Board: FC = () => {
                         (card) => card.id === active.id
                     );
                     if (overPrefix === "card") {
+
+                        // Categoryを跨ぐ・跨がないに関わらず、activeをoverのcol_idに変更
                         const overCardIndex = cards.findIndex(
                             (card) => card.id === over?.id
                         );
 
-                        // Categoryを跨ぐ・跨がないに関わらず、activeをoverのcol_idに変更
-                        if (activeCardIndex !== -1 && overCardIndex !== -1) {
-                            // 新しいカード配列を作成し、col_idを更新
-                            const newCards = cards.map((card, index) => {
+                        // undefinedの処理が面倒なので、ここで弾く
+                        const colId = over ? cards[overCardIndex].col_id : ""
+                        if (activeCardIndex !== -1 && colId !== "") {
+
+                            // 新しいカード配列を作成する。元の配列は変更しない。
+                            const updatedCards = cards.map((card, index) => {
                                 if (index === activeCardIndex) {
-                                    return { ...card, col_id: cards[overCardIndex].col_id };
+                                    // 新しい col_id を持つ新しいオブジェクトを返す
+                                    return { ...card, col_id: colId };
                                 }
+                                // その他のカードはそのまま返す
                                 return card;
                             });
-                            // カードの順番を更新
+
+                            // reorderedCards の定義と使用
                             const reorderedCards = arrayMove(
-                                newCards,
+                                updatedCards,
                                 activeCardIndex,
                                 overCardIndex
                             );
 
-                            // ステートを更新
+                            // ステートを更新する。新しい配列で更新するので、不変性が保たれる。
                             setCards(reorderedCards);
                             setIsUpdated(true);
                         }
+                        // // 新しいカード配列を作成し、col_idを更新
+                        // const newCards = cards.map((card, index) => {
+                        //     if (index === activeCardIndex) {
+                        //         return { ...card, col_id: colId };
+                        //     }
+                        //     return card;
+                        // });
+                        // // カードの順番を更新
+                        // const reorderedCards = arrayMove(
+                        //     newCards,
+                        //     activeCardIndex,
+                        //     overCardIndex
+                        // );
+
+                        // // ステートを更新
+                        // setCards(reorderedCards);
+                        // setIsUpdated(true);
+
                     } else if (overPrefix === "category") {
                         const overCategoryId = over?.id.toString(); // ドロップ先のカテゴリIDをstring型に変換
                         if (activeCardIndex !== -1 && overCategoryId) {
@@ -447,6 +517,7 @@ const Board: FC = () => {
                                     setCards={setCards} //状態cardsとそのアクセッサーsetCardsは個別のプロパティで渡すべき。
                                     cards={cards}
                                     className="bg-[#ECDED5] w-[230px] max-h-[500px] overflow-y-auto rounded-md"
+                                    setAddCard={setAddCard}
                                 />
                             </div>
                         ))}
@@ -460,6 +531,7 @@ const Board: FC = () => {
                                 setCards={setCards}
                                 cards={cards}
                                 className="bg-[#ECDED5] w-[230px] h-[300px] max-h-[500px] rounded-md"
+                                setAddCard={setAddCard}
                             />
                         ) : null}
 

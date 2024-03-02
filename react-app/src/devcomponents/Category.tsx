@@ -17,6 +17,7 @@ interface CategoryProps {
     ) => void;
     setCards: (updateFunc: (cards: CardType[]) => CardType[]) => void;
     cards: CardType[];
+    setAddCard: (card: CardType) => void;
 }
 
 const Category: FC<CategoryProps> = ({
@@ -25,6 +26,7 @@ const Category: FC<CategoryProps> = ({
     setCategories,
     setCards,
     cards,
+    setAddCard
 }) => {
 
     // カテゴリ追加の表示状態を管理するstate
@@ -108,8 +110,8 @@ const Category: FC<CategoryProps> = ({
                 <AddCardModal
                     categoryId={category.id}
                     closeAddCard={closeAddCard}
-                    setCards={setCards}
-                />
+                    setCards={setCards} cards={[]}
+                    setAddCard={setAddCard} />
             )}
         </>
     );

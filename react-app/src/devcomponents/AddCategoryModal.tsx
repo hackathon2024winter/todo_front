@@ -18,25 +18,22 @@ const AddCategoryModal: FC<AddCategoryModalProps> = ({
     closeAddCategory,
     setAddCategory
 }) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<CategoryFormType>();
+
+    const { register, handleSubmit, reset, formState: { errors }, } = useForm<CategoryFormType>();
 
     const addCategory = (data: CategoryFormType) => {
+        closeAddCategory();
+        reset();
 
         const newCategory: CategoryType = {
             id: "category-" + uuid(),
             col_pos: categories.length,
             col_name: data.col_name,
             description: data.description,
-        }
+        };
 
         setCategories((currentCategories) => [...currentCategories, newCategory]);
-        setAddCategory(newCategory)
-
-        closeAddCategory();
+        setAddCategory(newCategory);
     };
 
     return (
