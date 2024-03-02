@@ -1,7 +1,7 @@
 import {
     DndContext,
     DragEndEvent,
-    DragMoveEvent,
+    // DragMoveEvent,
     DragOverlay,
     DragStartEvent,
     KeyboardSensor,
@@ -34,6 +34,8 @@ const Board: FC = () => {
     );
     // カテゴリ追加の表示状態を管理するstate
     const [isAddCategoryModal, setAddCategoryModal] = useState(false);
+    // categories cardsが更新されたかを管理するstate ここでfetchを飛ばす。
+    const [isUpdated, setIsUpdated] = useState(false);
 
     // ドラッグ&ドロップする時に許可する入力
     const sensors = useSensors(
@@ -125,6 +127,83 @@ const Board: FC = () => {
         fetchCard();
     }, []); // 依存配列を空に設定して、コンポーネントのマウント時にのみ実行
 
+
+    // categoryが更新されたら並び替え
+    useEffect(() => {
+        categories.forEach((category, index) => {
+            category.col_pos = index;
+        });
+    }, [categories]);
+
+    useEffect(() => {
+        cards.forEach((card, index) => {
+            card.card_pos = index;
+        });
+    }, [cards]);
+
+    useEffect(() => {
+        // console.log("以下でfetch投げる");
+        categories.forEach(async (category) => {
+            const categoryInfo: CategoryFetchType = {
+                col_id: category.id,
+                col_pos: category.col_pos,
+                col_name: category.col_name,
+                description: category.description,
+            };
+
+            try {
+                const response = await fetch(`${BaseURL()}/updatecategory`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(categoryInfo),
+                });
+
+                const responseData = await response.json(); // レスポンスのJSONを解析
+                if (response.ok) {
+                    console.log(`${category.col_name}の更新成功`);
+                } else {
+                    console.log(responseData.detail);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+        cards.forEach(async (card) => {
+            const cardInfo: CardFetchType = {
+                card_id: card.id,
+                card_pos: card.card_pos,
+                col_id: card.col_id,
+                card_name: card.card_name,
+                input_date: new Date().toISOString().split("T")[0],
+                due_date: card.due_date,
+                color: card.color,
+                description: card.description,
+            };
+
+            try {
+                const response = await fetch(`${BaseURL()}/updatecard`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(cardInfo),
+                });
+
+                const responseData = await response.json(); // レスポンスのJSONを解析
+                if (response.ok) {
+                    console.log(`${card.card_name}の更新成功`);
+                } else {
+                    console.log(responseData.detail);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    }, [cards, categories, isUpdated]);
+
     // Drag中のマウスに追随させるコンポーネントの表示フラグ
     const onDragStart = useCallback(
         (e: DragStartEvent) => {
@@ -187,6 +266,7 @@ const Board: FC = () => {
 
                             // ステートを更新
                             setCards(reorderedCards);
+                            setIsUpdated(true);
                         }
                     } else if (overPrefix === "category") {
                         const overCategoryId = over?.id.toString(); // ドロップ先のカテゴリIDをstring型に変換
@@ -200,7 +280,10 @@ const Board: FC = () => {
                                 return card;
                             });
 
-                            // ここでエラーが発生していた reorderedCards の定義と使用を修正
+                            // activeのcol_idを更新
+                            cards[activeCardIndex].col_id = overCategoryId;
+
+                            // reorderedCards の定義と使用を修正
                             const reorderedCards = arrayMove(
                                 updatedCards,
                                 activeCardIndex,
@@ -209,6 +292,7 @@ const Board: FC = () => {
 
                             // ステートを更新
                             setCards(reorderedCards);
+                            setIsUpdated(true);
                         }
                     }
                     break;
@@ -229,8 +313,23 @@ const Board: FC = () => {
                         // `arrayMove`で新しい配列を作成
                         const newCategories = arrayMove(categories, oldIndex, newIndex);
 
+                        // 各category.col_posを更新後のindexと一致させる
+                        categories.forEach((category, index) => {
+                            category.col_pos = index;
+                        });
+
+                        categories.forEach((category) => {
+                            const targetCards = cards.filter(
+                                (card) => card.col_id === category.id
+                            );
+                            targetCards?.forEach((card, index) => {
+                                card.card_pos = index;
+                            });
+                        });
+
                         // ステートを更新
                         setCategories(newCategories);
+                        setIsUpdated(true);
                     }
                     break;
                 }
@@ -243,45 +342,45 @@ const Board: FC = () => {
         [cards, categories]
     );
 
-    const onDragMove = useCallback(
-        (e: DragMoveEvent) => {
-            const { active, over } = e;
+    // const onDragMove = useCallback(
+    //     (e: DragMoveEvent) => {
+    //         const { active, over } = e;
 
-            const activePrefix = active.id.toString().split("-")[0];
-            const overPrefix = over?.id.toString().split("-")[0];
-            switch (activePrefix) {
-                case "card": {
-                    const activeCard = cards.find((card) => card.id === active.id);
-                    if (activeCard) {
-                        console.log(
-                            `Move: ${activeCard.id.toString().slice(0, 15)} Over: ${over?.id
-                                .toString()
-                                .slice(0, 15)}`
-                        );
-                    }
-                    break;
-                }
-                case "category": {
-                    const activeCategory = categories.find(
-                        (category) => category.id === active.id
-                    );
-                    if (activeCategory && activePrefix === overPrefix) {
-                        console.log(
-                            `Move: ${activeCategory.id
-                                .toString()
-                                .slice(0, 15)} Over: ${over?.id.toString().slice(0, 15)}`
-                        );
-                    }
-                    break;
-                }
-                default:
-                    // ここには到達しないはずだが、プレフィックスが想定外の値の場合。
-                    console.log("Unknown prefix:", activePrefix);
-                    break;
-            }
-        },
-        [cards, categories]
-    );
+    //         const activePrefix = active.id.toString().split("-")[0];
+    //         const overPrefix = over?.id.toString().split("-")[0];
+    //         switch (activePrefix) {
+    //             case "card": {
+    //                 const activeCard = cards.find((card) => card.id === active.id);
+    //                 if (activeCard) {
+    //                     // console.log(
+    //                     //     `Move: ${activeCard.id.toString().slice(0, 15)} Over: ${over?.id
+    //                     //         .toString()
+    //                     //         .slice(0, 15)}`
+    //                     // );
+    //                 }
+    //                 break;
+    //             }
+    //             case "category": {
+    //                 const activeCategory = categories.find(
+    //                     (category) => category.id === active.id
+    //                 );
+    //                 if (activeCategory && activePrefix === overPrefix) {
+    //                     // console.log(
+    //                     //     `Move: ${activeCategory.id
+    //                     //         .toString()
+    //                     //         .slice(0, 15)} Over: ${over?.id.toString().slice(0, 15)}`
+    //                     // );
+    //                 }
+    //                 break;
+    //             }
+    //             default:
+    //                 // ここには到達しないはずだが、プレフィックスが想定外の値の場合。
+    //                 console.log("Unknown prefix:", activePrefix);
+    //                 break;
+    //         }
+    //     },
+    //     [cards, categories]
+    // );
 
     // カテゴリ追加を開く関数
     const openAddCategory = () => {
@@ -302,7 +401,7 @@ const Board: FC = () => {
                     collisionDetection={rectIntersection}
                     onDragStart={onDragStart}
                     onDragEnd={onDragEnd}
-                    onDragMove={onDragMove}
+                // onDragMove={onDragMove}
                 >
                     <div className=" flex flex-row gap-4">
                         {categories.map((category) => (
@@ -332,14 +431,24 @@ const Board: FC = () => {
                         {draggedCard ? (
                             <Card
                                 card={draggedCard}
-                                className={
-                                    classnames("my-2", "mx-1", "py-2", "bg-[#F0EFEE]", "flex", "flex-row",
-                                        "justify-between", "items-center", "rounded-sm",
-                                        draggedCard.color === "red" ? "border-l-[18px] border-solid border-PoulRed" :
-                                            draggedCard.color === "blue" ? "border-l-[18px] border-solid border-PoulBlue" :
-                                                draggedCard.color === "yellow" ? "border-l-[18px] border-solid border-PoulYellow" :
-                                                    "bg-white")
-                                }
+                                className={classnames(
+                                    "my-2",
+                                    "mx-1",
+                                    "py-2",
+                                    "bg-[#F0EFEE]",
+                                    "flex",
+                                    "flex-row",
+                                    "justify-between",
+                                    "items-center",
+                                    "rounded-sm",
+                                    draggedCard.color === "red"
+                                        ? "border-l-[18px] border-solid border-PoulRed"
+                                        : draggedCard.color === "blue"
+                                            ? "border-l-[18px] border-solid border-PoulBlue"
+                                            : draggedCard.color === "yellow"
+                                                ? "border-l-[18px] border-solid border-PoulYellow"
+                                                : "bg-white"
+                                )}
                                 setCards={setCards}
                             />
                         ) : null}
@@ -361,10 +470,11 @@ const Board: FC = () => {
                         <div className="w-6 h-6">
                             <img src={"/add-icon.svg"} alt="追加" />
                         </div>
-                        <span className="whitespace-normal break-words">カテゴリの追加</span>
+                        <span className="whitespace-normal break-words">
+                            カテゴリの追加
+                        </span>
                     </div>
                 </button>
-
             </div>
             {isAddCategoryModal && (
                 <AddCategoryModal
